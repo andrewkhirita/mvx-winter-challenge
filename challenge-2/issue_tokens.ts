@@ -11,15 +11,16 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
+const tokenTicker = `WINTER`
+const apiNetworkProvider = new ApiNetworkProvider(URL, { 
+    clientName: "Multiversx Winter Coding" 
+});
 
 async function issueToken(
     signer: UserSigner,
     tokenName: string,
     tokenTicker: string
 ): Promise<void> {
-    const apiNetworkProvider = new ApiNetworkProvider(URL, { 
-        clientName: "Multiversx Winter Coding" 
-    });
     let config = new TransactionsFactoryConfig({ chainID: "D" });
     let tokenManagementFactory = new TokenManagementTransactionsFactory({ config: config });
     const userAddress = signer.getAddress().toString();
@@ -63,7 +64,6 @@ async function processWallet(shard: number, wallet: number) {
     
     for (let tokenIndex = 1; tokenIndex <= 3; tokenIndex++) {
         const tokenName = `WinterMVX${shard}${wallet}${tokenIndex}`;
-        const tokenTicker = `WINTER`;
         console.log(`Processing wallet_shard${shard}_${wallet}.json with token ${tokenName}`);
         await issueToken(signer, tokenName, tokenTicker);
         await new Promise(resolve => setTimeout(resolve, 7000));

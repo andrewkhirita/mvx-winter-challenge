@@ -1,4 +1,4 @@
-# Challenge #1: Token Issuer
+# Challenge #2: Token Issuer
 
 Issue tokens for each wallet generated in challenge #1
 
@@ -8,7 +8,6 @@ Issue tokens for each wallet generated in challenge #1
 - TypeScript
 - MultiversX SDK
 - Wallets generated from challenge #1
-
 
 ## Setup
 
