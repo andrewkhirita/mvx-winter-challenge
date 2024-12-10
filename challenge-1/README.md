@@ -1,6 +1,6 @@
 # Challenge #1: Wallet Generator
 
-Generate MultiversX wallets across different shards
+Script that generate MultiversX Wallets across different Shards
 
 ## Prerequisites
 

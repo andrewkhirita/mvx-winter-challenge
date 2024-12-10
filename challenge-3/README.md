@@ -1,6 +1,6 @@
 # Challenge #3: Transfer tokens
 
-Script that transfers 10,000 units of each issued token (challenge #2) from each generated account (challenge #2) to 1000 other accounts
+Script that transfers 10,000 units of each issued token (challenge #2) from each generated account (challenge #1) to 1000 other accounts using API
 
 ## Prerequisites
 

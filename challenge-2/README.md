@@ -1,6 +1,6 @@
 # Challenge #2: Token Issuer
 
-Issue tokens for each wallet generated in challenge #1
+Script that issue tokens for each wallet generated in challenge #1
 
 ## Prerequisites
 
