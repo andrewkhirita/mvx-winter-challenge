@@ -1,0 +1,23 @@
+{
+  "version": 4,
+  "kind": "secretKey",
+  "id": "6f58a24c-4a26-432b-9776-c4ba3159bcc4",
+  "address": "63cad9d788c473a875a1294d4de9328da39e00ed41eed21f4dc13b81fb8e0b09",
+  "bech32": "erd1v09dn4ugc3e6sadp99x5m6fj3k3euq8dg8hdy86dcyacr7uwpvys2gt2ly",
+  "crypto": {
+    "ciphertext": "1172176cc3044ae81448201ab906d903e4cbeab6d659257ae199c08f4ebad9ef842458ac92dbe17eff8253b8ac5682d60da29c26f83945bdc90a5d5ef0116f91",
+    "cipherparams": {
+      "iv": "0e8f2b85b3966c3d8433d4253219d28d"
+    },
+    "cipher": "aes-128-ctr",
+    "kdf": "scrypt",
+    "kdfparams": {
+      "dklen": 32,
+      "salt": "377048f83ee13ddd7dbaf0151bd4cec84a43cf5df91d0bf71126ed9ca49f5073",
+      "n": 4096,
+      "r": 8,
+      "p": 1
+    },
+    "mac": "b851c736a72a503aef6275cfe668b9436b50f7317e9c0529588701a75c0af0fd"
+  }
+}
