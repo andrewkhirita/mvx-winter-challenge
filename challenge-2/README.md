@@ -23,7 +23,3 @@ Run the script:
 ```bash
 ts-node issue_tokens.ts
 ```
-
-This will:
-1. Generate 9 unique wallets (3 per shard)
-2. Save them in the `wallets` folder as JSON files
