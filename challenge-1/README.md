@@ -1,6 +1,6 @@
-# MultiversX Wallet Generator 
+# Challenge #1: Wallet Generator
 
-Simple script to generate MultiversX wallets across different shards on devnet.
+Generate MultiversX wallets across different shards
 
 ## Prerequisites
 
