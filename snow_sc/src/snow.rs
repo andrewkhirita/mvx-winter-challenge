@@ -162,7 +162,7 @@ pub trait Snow {
                 self.send().direct_esdt(
                     &caller,
                     &token_id,
-                    0, // nonce
+                    0, 
                     &balance
                 );
 
