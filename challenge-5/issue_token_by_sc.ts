@@ -17,6 +17,7 @@ import {
 const URL = "https://devnet-api.multiversx.com";
 const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgquuqzmlvqz7qdgnnfl5qwt50ncxw08y70896qephqm0";
 const FUNCTION = "issueTokenSnow";
+const TICKER = "SNOW";
 const CHAIN_ID = "D";
 
 const TOTAL_SUPPLY = 50000000000000000000;
@@ -69,11 +70,10 @@ async function loadWallet(walletPath: string): Promise<UserSigner> {
 
 async function main() {
     try {
-
       // Using generated wallets from Shard 0 as an example to issue tokens
       const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${2}_${1}.json`);
-      const tokenName = `SNOW${2}${1}`;
-      const tokenTicker = `SNOW`;
+      const tokenName = `${TICKER}${2}${1}`;
+      const tokenTicker = `${TICKER}`;
       
       const signer = await loadWallet(walletPath);
       await issueToken(signer, tokenName, tokenTicker);

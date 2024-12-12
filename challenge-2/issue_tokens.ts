@@ -11,7 +11,11 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
+const CHAIN_ID = "D";
 const tokenTicker = `WINTER`
+const supply = 100_000_000;
+const numDecimals = 8;
+
 const apiNetworkProvider = new ApiNetworkProvider(URL, { 
     clientName: "Multiversx Winter Coding" 
 });
@@ -21,7 +25,7 @@ async function issueToken(
     tokenName: string,
     tokenTicker: string
 ): Promise<void> {
-    let config = new TransactionsFactoryConfig({ chainID: "D" });
+    let config = new TransactionsFactoryConfig({ chainID: CHAIN_ID });
     let tokenManagementFactory = new TokenManagementTransactionsFactory({ config: config });
     const userAddress = signer.getAddress().toString();
     const address = Address.fromBech32(userAddress);
@@ -33,8 +37,8 @@ async function issueToken(
         sender: address,
         tokenName: tokenName,
         tokenTicker: tokenTicker,
-        initialSupply: BigInt(100_000_000) * BigInt(10 ** 8),
-        numDecimals: BigInt(8),
+        initialSupply: BigInt(supply) * BigInt(10 ** 8),
+        numDecimals: BigInt(numDecimals),
         canFreeze: true,
         canWipe: true,
         canPause: true,
@@ -61,13 +65,9 @@ async function loadWallet(walletPath: string): Promise<UserSigner> {
 async function processWallet(shard: number, wallet: number) {
     const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${shard}_${wallet}.json`);
     const signer = await loadWallet(walletPath);
-    
-    for (let tokenIndex = 1; tokenIndex <= 3; tokenIndex++) {
-        const tokenName = `WinterMVX${shard}${wallet}${tokenIndex}`;
-        console.log(`Processing wallet_shard${shard}_${wallet}.json with token ${tokenName}`);
-        await issueToken(signer, tokenName, tokenTicker);
-        await new Promise(resolve => setTimeout(resolve, 7000));
-    }
+    const tokenName = `WinterX${shard}${wallet}`;
+    console.log(`Processing wallet_shard${shard}_${wallet}.json with token ${tokenName}`);
+    await issueToken(signer, tokenName, tokenTicker);
 }
 
 async function main() {

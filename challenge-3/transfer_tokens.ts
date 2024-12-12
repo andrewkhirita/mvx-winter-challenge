@@ -15,9 +15,10 @@ import {
 const URL = "https://devnet-api.multiversx.com";
 const CHAIND_ID = "D";
 const TICKER = "WINTER";
+const QUANTITY = 10_000_00000000;
 
 const apiNetworkProvider = new ApiNetworkProvider(URL, { 
-    clientName: "Multiversx Winter Coding" 
+    clientName: "MultiversX Winter Coding" 
 });
 
 async function fetchAccounts(totalAccounts: number): Promise<Address[]> {
@@ -51,7 +52,7 @@ async function getTokenIdentifier(walletAddress: Address): Promise<string> {
 
 async function processAllWallets(walletPaths: string[], receiverAddresses: Address[]) {
     const batchSize = 100; 
-    const batchDelay = 20000;
+    const batchDelay = 17000;
 
     const promises = walletPaths.map(async (walletPath) => {
         console.log(`Starting transactions for wallet: ${walletPath}`);
@@ -97,7 +98,7 @@ async function processWallet(walletPath: string, receiverAddresses: Address[]) {
             tokenTransfers: [
                 new TokenTransfer({
                     token: new Token({ identifier: tokenIdentifier }),
-                    amount: BigInt(10_000_00000000),
+                    amount: BigInt(QUANTITY),
                 })
             ]
         });
