@@ -51,6 +51,7 @@ async function getTokenIdentifier(walletAddress: Address): Promise<string> {
 }
 
 async function processAllWallets(walletPaths: string[], receiverAddresses: Address[]) {
+    //I tried using a smaller delay, but I noticed that after 100 transactions, the rest no longer execute, so I increased the value.
     const batchSize = 100; 
     const batchDelay = 17000;
 

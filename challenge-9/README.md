@@ -1,10 +1,10 @@
-# Challenge #9: Claim Tokens
+# Challenge #9: Claim Minted Tokens
 
 Script that allows users (wallets generated at challenge #1) to claims the already minted tokens
 
 ## Description
 
-This script interacts with the smart contract deployed at the address `erd1qqqqqqqqqqqqqpgqexvchcft04n883346yphv7mpfwy6klgg6dkqdsvezp`. The smart contract was deployed using one of the wallets generated in Challenge #1. 
+This script interacts with the smart contract deployed at the address `erd1qqqqqqqqqqqqqpgqlaa66qc2uapx5ef79a4csqu2cgqpr0ty6dkqpl73p8`. The smart contract was deployed using one of the wallets generated in Challenge #1. 
 
 If you want to use a different smart contract address, please refer to the "snow_sc" instructions for deploying your own contract.
 

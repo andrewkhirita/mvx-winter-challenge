@@ -30,5 +30,4 @@ Public MultiversX APIs have a rate limit mechanism that brings the following lim
 
 To handle these limitations efficiently, the script:
 - Implements parallel processing for concurrent transactions
-- Includes rate limiting logic to avoid API throttling
 - Uses batching strategies to optimize transaction throughput

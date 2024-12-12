@@ -1,4 +1,4 @@
-# Challenge #3: Fetch Transactions
+# Challenge #4: Fetch Transactions
 
 Script that queries the blockchain to retrieve and display the list of transactions for each of the generated account (challenge #1)
 
