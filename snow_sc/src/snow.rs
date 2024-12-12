@@ -1,5 +1,4 @@
 #![no_std]
-
 multiversx_sc::imports!();
 multiversx_sc::derive_imports!();
 
@@ -11,11 +10,10 @@ pub trait Snow {
     #[init]
     fn init(&self) {}
 
-
-    //Challenge - 5
     #[payable("EGLD")]
     #[endpoint(issueTokenSnow)]
-    fn issue_token(&self, 
+    fn issue_token(
+        &self,
         token_name: ManagedBuffer,
         token_ticker: ManagedBuffer,
         num_decimals: usize,
@@ -26,21 +24,21 @@ pub trait Snow {
         can_add_special_roles: bool,
         can_burn: bool,
         can_mint: bool,
-        ) {
+    ) {
         let payment_amount = self.call_value().egld_value();
         let caller = self.blockchain().get_caller();
-        
         let token_properties = FungibleTokenProperties {
             num_decimals,
             can_freeze,
             can_wipe,
             can_pause,
-            can_change_owner: false, 
+            can_change_owner: false,
             can_upgrade: false,
             can_add_special_roles,
             can_burn,
             can_mint,
         };
+
         self.send()
             .esdt_system_sc_proxy()
             .issue_fungible(
@@ -51,13 +49,15 @@ pub trait Snow {
                 token_properties
             )
             .async_call()
-            .with_callback(self.callbacks().issue_callback(&caller)).call_and_exit();
+            .with_callback(self.callbacks().issue_callback(&caller, initial_supply))
+            .call_and_exit();
     }
 
     #[callback]
     fn issue_callback(
         &self,
         caller: &ManagedAddress,
+        initial_supply: BigUint,
         #[call_result] result: ManagedAsyncCallResult<()>,
     ) {
         match result {
@@ -65,7 +65,9 @@ pub trait Snow {
                 let payments = self.call_value().all_esdt_transfers();
                 if !payments.is_empty() {
                     let token_id = payments.get(0).token_identifier;
-                    self.token_manager(caller).insert(token_id);
+                    self.user_tokens(caller).insert(token_id.clone());
+                    self.token_balance(&token_id).set(&initial_supply);
+                    self.issued_tokens_per_user(caller).insert(token_id);
                 }
             }
             ManagedAsyncCallResult::Err(_) => {
@@ -74,29 +76,62 @@ pub trait Snow {
         }
     }
 
-    //Challenge - 6
-    #[endpoint(burnTokens)]
-    fn burn_tokens(
-        &self,
-        token_identifier: TokenIdentifier,
-        token_nonce: u64,
-        amount: BigUint,
-    ) {
-        let current_balance = self.balance(&token_identifier).get();
-        self.balance(&token_identifier)
-            .set(&(current_balance - &amount));
+     //Challenge - 6
+     #[endpoint(burnTokens)]
+     fn burn_tokens(
+         &self,
+         token_identifier: TokenIdentifier,
+         token_nonce: u64,
+         amount: BigUint,
+     ) {
+         let current_balance = self.token_balance(&token_identifier).get();
+         require!(
+             current_balance >= amount, "Insufficient balance for burning"
+         );
+         self.token_balance(&token_identifier).set(&(current_balance - &amount));
+         self.send().esdt_local_burn(
+             &token_identifier,
+             token_nonce,
+             &amount,
+         );
+     }
 
-        self.send().esdt_local_burn(
-            &token_identifier,
-            token_nonce,
-            &amount,
-        );
+    //Challenge - 7
+    #[view(getAllUsersTokens)]
+    fn get_all_user_tokens(&self, address: &ManagedAddress) -> MultiValueEncoded<TokenIdentifier> {
+        let mut result = MultiValueEncoded::new();
+        for token in self.issued_tokens_per_user(address).iter() {
+            result.push(token);
+        }
+        result
     }
 
-    #[storage_mapper("tokenManager")]
-    fn token_manager(&self, user: &ManagedAddress) -> UnorderedSetMapper<TokenIdentifier>;
+    #[view(getAllUserTokenBalances)]
+    fn get_all_user_token_balances(
+        &self,
+        address: &ManagedAddress,
+    ) -> MultiValueEncoded<(TokenIdentifier, BigUint)> {
+        let mut result = MultiValueEncoded::new();
+        
+        for token in self.issued_tokens_per_user(address).iter() {
+            let balance = self.token_balance(&token).get();
+            result.push((token, balance));
+        }
+        
+        result
+    }
 
-    #[storage_mapper("balance")]
-    fn balance(&self, token_id: &TokenIdentifier) -> SingleValueMapper<BigUint>;
+    #[view(getSingleTokenBalance)]
+    fn get_single_token_balance(&self, token_id: TokenIdentifier) -> BigUint {
+       self.token_balance(&token_id).get()
+    }
 
+    #[storage_mapper("issuedTokensPerUser")]
+    fn issued_tokens_per_user(&self, user: &ManagedAddress) -> UnorderedSetMapper<TokenIdentifier>;
+
+    #[storage_mapper("tokenBalance")]
+    fn token_balance(&self, token_id: &TokenIdentifier) -> SingleValueMapper<BigUint>;
+
+    #[storage_mapper("userTokens")]
+    fn user_tokens(&self, address: &ManagedAddress) -> UnorderedSetMapper<TokenIdentifier>;
 }

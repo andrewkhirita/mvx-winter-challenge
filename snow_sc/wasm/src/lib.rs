@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////
 
 // Init:                                 1
-// Endpoints:                            2
+// Endpoints:                            6
 // Async Callback:                       1
-// Total number of exported functions:   4
+// Total number of exported functions:   8
 
 #![no_std]
 #![allow(internal_features)]
@@ -22,6 +22,10 @@ multiversx_sc_wasm_adapter::endpoints! {
         init => init
         upgrade => upgrade
         issueTokenSnow => issue_token
+        burnTokens => burn_tokens
+        getAllUsersTokens => get_all_user_tokens
+        getAllUserTokenBalances => get_all_user_token_balances
+        getSingleTokenBalance => get_single_token_balance
     )
 }
 

@@ -16,7 +16,7 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqx07dn5s6sg678zvv7kzv50jx4khjdugc4xgqhvpacl";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqexvchcft04n883346yphv7mpfwy6klgg6dkqdsvezp";
 const FUNCTION = "burnTokens";
 
 const TICKER = "SNOW-40d0b4";
