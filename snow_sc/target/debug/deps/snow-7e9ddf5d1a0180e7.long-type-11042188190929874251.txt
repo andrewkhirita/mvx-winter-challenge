@@ -1,1 +1,0 @@
-(multiversx_sc::types::ManagedAsyncCallResult<<Self as ContractBase>::Api, multiversx_sc::storage::mappers::FungibleTokenMapper<<Self as ContractBase>::Api>>, ())

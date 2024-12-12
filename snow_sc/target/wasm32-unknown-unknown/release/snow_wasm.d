@@ -1,1 +1,0 @@
-/Users/andrewkhirita/Desktop/mvx-winter-challenge/snow_sc/target/wasm32-unknown-unknown/release/snow_wasm.wasm: /Users/andrewkhirita/Desktop/mvx-winter-challenge/snow_sc/src/snow.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/snow_sc/wasm/src/lib.rs
