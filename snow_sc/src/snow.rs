@@ -11,6 +11,8 @@ pub trait Snow {
     #[init]
     fn init(&self) {}
 
+
+    //Challenge - 5
     #[payable("EGLD")]
     #[endpoint(issueTokenSnow)]
     fn issue_token(&self, 
@@ -72,7 +74,29 @@ pub trait Snow {
         }
     }
 
+    //Challenge - 6
+    #[endpoint(burnTokens)]
+    fn burn_tokens(
+        &self,
+        token_identifier: TokenIdentifier,
+        token_nonce: u64,
+        amount: BigUint,
+    ) {
+        let current_balance = self.balance(&token_identifier).get();
+        self.balance(&token_identifier)
+            .set(&(current_balance - &amount));
+
+        self.send().esdt_local_burn(
+            &token_identifier,
+            token_nonce,
+            &amount,
+        );
+    }
+
     #[storage_mapper("tokenManager")]
     fn token_manager(&self, user: &ManagedAddress) -> UnorderedSetMapper<TokenIdentifier>;
+
+    #[storage_mapper("balance")]
+    fn balance(&self, token_id: &TokenIdentifier) -> SingleValueMapper<BigUint>;
 
 }
