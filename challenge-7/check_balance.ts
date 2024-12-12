@@ -14,7 +14,6 @@ import {
 const URL = "https://devnet-api.multiversx.com";
 const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqexvchcft04n883346yphv7mpfwy6klgg6dkqdsvezp";
 const FUNCTION = "getAllUserTokenBalances";
-
 const CHAIN_ID = "D";
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);

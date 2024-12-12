@@ -20,13 +20,14 @@ const apiNetworkProvider = new ApiNetworkProvider(URL, {
     clientName: "Multiversx Winter Coding" 
 });
 
+const config = new TransactionsFactoryConfig({ chainID: CHAIN_ID });
+const tokenManagementFactory = new TokenManagementTransactionsFactory({ config: config });
+
 async function issueToken(
     signer: UserSigner,
     tokenName: string,
     tokenTicker: string
 ): Promise<void> {
-    let config = new TransactionsFactoryConfig({ chainID: CHAIN_ID });
-    let tokenManagementFactory = new TokenManagementTransactionsFactory({ config: config });
     const userAddress = signer.getAddress().toString();
     const address = Address.fromBech32(userAddress);
     const account = new Account(address);

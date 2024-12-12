@@ -143,6 +143,17 @@
                     "type": "BigUint"
                 }
             ]
+        },
+        {
+            "name": "claimTokens",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
         }
     ],
     "esdtAttributes": [],

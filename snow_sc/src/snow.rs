@@ -111,13 +111,17 @@ pub trait Snow {
         &self,
         address: &ManagedAddress,
     ) -> MultiValueEncoded<(TokenIdentifier, BigUint)> {
+        let caller = self.blockchain().get_caller();
+        require!(
+            caller == *address,
+            "Only the address owner can view all balances"
+        );
+
         let mut result = MultiValueEncoded::new();
-        
         for token in self.issued_tokens_per_user(address).iter() {
             let balance = self.token_balance(&token).get();
             result.push((token, balance));
         }
-        
         result
     }
 
@@ -125,6 +129,53 @@ pub trait Snow {
     fn get_single_token_balance(&self, token_id: TokenIdentifier) -> BigUint {
        self.token_balance(&token_id).get()
     }
+
+    //Challenge - 8
+    #[endpoint(claimUserTokens)]
+    fn claim_user_tokens(&self, token_identifier: TokenIdentifier) {
+        let caller = self.blockchain().get_caller();
+    
+        let claimable = self.claimable_amount(&caller).get();
+        require!(claimable > 0, "No tokens available to claim");
+
+        self.send().direct_esdt(
+            &caller,
+            &token_identifier,
+            0,
+            &claimable,
+        );
+
+        self.claimable_amount(&caller).clear();
+    }
+
+    //Challenge - 9
+    #[endpoint(claimTokens)]
+    fn claim_tokens(&self) {
+        let caller = self.blockchain().get_caller();
+        
+        require!(
+            self.claimable_amount(&caller).get() > 0,
+            "Nothing to claim for this address"
+        );
+
+        let token_id = self.token_to_claim().get();       
+        let amount = self.claimable_amount(&caller).get();
+
+        self.send().direct_esdt(
+            &caller,
+            &token_id,
+            0, // nonce
+            &amount
+        );
+
+        self.claimable_amount(&caller).clear();
+    }
+
+    #[storage_mapper("tokenToClaim")]
+    fn token_to_claim(&self) -> SingleValueMapper<TokenIdentifier>;
+
+    #[storage_mapper("claimableAmount")]
+    fn claimable_amount(&self, user: &ManagedAddress) -> SingleValueMapper<BigUint>;
 
     #[storage_mapper("issuedTokensPerUser")]
     fn issued_tokens_per_user(&self, user: &ManagedAddress) -> UnorderedSetMapper<TokenIdentifier>;
