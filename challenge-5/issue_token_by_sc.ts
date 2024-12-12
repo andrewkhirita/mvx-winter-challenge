@@ -15,7 +15,7 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqexvchcft04n883346yphv7mpfwy6klgg6dkqdsvezp";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlaa66qc2uapx5ef79a4csqu2cgqpr0ty6dkqpl73p8";
 const FUNCTION = "issueTokenSnow";
 const TOKEN_NAME = "SnowX";
 const TICKER = "SNOW";
@@ -69,19 +69,37 @@ async function loadWallet(walletPath: string): Promise<UserSigner> {
     return UserSigner.fromWallet(walletJson, 'password');
 }
 
-async function main() {
+async function issueTokenForWallet(shardId: number, walletIndex: number): Promise<void> {
     try {
-      // Using generated wallets from Shard 0 as an example to issue tokens
-      const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${0}_${3}.json`);
-      const tokenName = `${TOKEN_NAME}${0}${3}`;
-      const tokenTicker = `${TICKER}`;
-      
-      const signer = await loadWallet(walletPath);
-      await issueToken(signer, tokenName, tokenTicker);
-
-      console.log("All tokens have been issued successfully");
+        const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${shardId}_${walletIndex}.json`);
+        const tokenName = `${TOKEN_NAME}${shardId}${walletIndex}`;
+        const tokenTicker = `${TICKER}`;
+        
+        const signer = await loadWallet(walletPath);
+        await issueToken(signer, tokenName, tokenTicker);
+        
+        console.log(`Token issued successfully for Shard ${shardId}, Wallet ${walletIndex}`);
     } catch (error) {
-      console.error("Error during token issuance:", error);
+        console.error(`Error issuing token for Shard ${shardId}, Wallet ${walletIndex}:`, error);
+        throw error; 
+    }
+}
+
+async function main() {
+    const SHARD_COUNT = 3;
+    const WALLETS_PER_SHARD = 3;
+    
+    try {
+        const issuancePromises: Promise<void>[] = [];
+        for (let shardId = 0; shardId < SHARD_COUNT; shardId++) {
+            for (let walletIndex = 1; walletIndex <= WALLETS_PER_SHARD; walletIndex++) {
+                issuancePromises.push(issueTokenForWallet(shardId, walletIndex));
+            }
+        }
+        await Promise.all(issuancePromises);        
+        console.log("All tokens have been issued successfully!");
+    } catch (error) {
+        console.error("Error during parallel token issuance:", error);
     }
 }
 

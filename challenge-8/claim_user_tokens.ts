@@ -12,7 +12,7 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqexvchcft04n883346yphv7mpfwy6klgg6dkqdsvezp";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlaa66qc2uapx5ef79a4csqu2cgqpr0ty6dkqpl73p8";
 const FUNCTION = "claimUserTokens";
 
 const CHAIN_ID = "D";
@@ -64,7 +64,7 @@ async function main() {
     try {
       const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${0}_${1}.json`);
       const signer = await loadWallet(walletPath);
-      const ticker = "SNOW";
+      const ticker = "SNOW-44d7a4";
       await claimUserTokens(signer, ticker);
 
     } catch (error) {

@@ -153,22 +153,22 @@ pub trait Snow {
     fn claim_tokens(&self) {
         let caller = self.blockchain().get_caller();
         
-        require!(
-            self.claimable_amount(&caller).get() > 0,
-            "Nothing to claim for this address"
-        );
+        let user_tokens = self.issued_tokens_per_user(&caller);
+        require!(!user_tokens.is_empty(), "No tokens found for this address");
 
-        let token_id = self.token_to_claim().get();       
-        let amount = self.claimable_amount(&caller).get();
+        for token_id in user_tokens.iter() {
+            let balance = self.token_balance(&token_id).get();
+            if balance > BigUint::zero() {
+                self.send().direct_esdt(
+                    &caller,
+                    &token_id,
+                    0, // nonce
+                    &balance
+                );
 
-        self.send().direct_esdt(
-            &caller,
-            &token_id,
-            0, // nonce
-            &amount
-        );
-
-        self.claimable_amount(&caller).clear();
+                self.token_balance(&token_id).clear();
+            }
+        }
     }
 
     #[storage_mapper("tokenToClaim")]

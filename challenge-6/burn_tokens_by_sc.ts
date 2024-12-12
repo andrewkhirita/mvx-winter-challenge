@@ -16,10 +16,10 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqexvchcft04n883346yphv7mpfwy6klgg6dkqdsvezp";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlaa66qc2uapx5ef79a4csqu2cgqpr0ty6dkqpl73p8";
 const FUNCTION = "burnTokens";
 
-const TICKER = "SNOW-40d0b4";
+const TICKER = "SNOW-44d7a4";
 const NONCE = 0; //standard for all esdts
 const CHAIN_ID = "D";
 
@@ -59,7 +59,7 @@ async function burnTokens(
   
     const txHash = await apiNetworkProvider.sendTransaction(transaction);
     console.log("Transaction hash:", txHash);
-  }
+}
   
 
 async function loadWallet(walletPath: string): Promise<UserSigner> {
@@ -69,15 +69,15 @@ async function loadWallet(walletPath: string): Promise<UserSigner> {
 
 async function main() {
     try {
-      const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${0}_${3}.json`);
+      const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${0}_${1}.json`);
       const tokenTicker = `${TICKER}`;
       
       const signer = await loadWallet(walletPath);
       await burnTokens(signer, new TokenIdentifierValue(tokenTicker), new BigUIntValue(500000000000000000));
 
-      console.log("All tokens have been issued successfully");
+      console.log("Tokens have been burned successfully");
     } catch (error) {
-      console.error("Error during token issuance:", error);
+      console.error("Error during burn token:", error);
     }
 }
 

@@ -145,7 +145,7 @@
             ]
         },
         {
-            "name": "claimTokens",
+            "name": "claimUserTokens",
             "mutability": "mutable",
             "inputs": [
                 {
@@ -153,6 +153,12 @@
                     "type": "TokenIdentifier"
                 }
             ],
+            "outputs": []
+        },
+        {
+            "name": "claimTokens",
+            "mutability": "mutable",
+            "inputs": [],
             "outputs": []
         }
     ],

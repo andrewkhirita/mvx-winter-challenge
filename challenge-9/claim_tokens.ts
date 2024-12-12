@@ -11,9 +11,8 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqexvchcft04n883346yphv7mpfwy6klgg6dkqdsvezp";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlaa66qc2uapx5ef79a4csqu2cgqpr0ty6dkqpl73p8";
 const FUNCTION = "claimTokens";
-
 const CHAIN_ID = "D";
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);
@@ -49,20 +48,40 @@ async function claimTokens(
     console.log("Transaction hash:", txHash);
   }
   
-
 async function loadWallet(walletPath: string): Promise<UserSigner> {
     const walletJson = JSON.parse(fs.readFileSync(walletPath, 'utf8'));
     return UserSigner.fromWallet(walletJson, 'password');
 }
 
-async function main() {
+async function claimTokensWallets(shardId: number, walletIndex: number): Promise<void> {
     try {
-      const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${0}_${1}.json`);
-      const signer = await loadWallet(walletPath);
-      await claimTokens(signer);
-
+        const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${shardId}_${walletIndex}.json`);
+        
+        const signer = await loadWallet(walletPath);
+        await claimTokens(signer);
+        
+        console.log(`Tokens was succesfully claimed!`);
     } catch (error) {
-      console.error("Error during claim tokens", error);
+        console.error(`Error in claiming tokens!`, error);
+        throw error; 
+    }
+}
+
+async function main() {
+    const SHARD_COUNT = 3;
+    const WALLETS_PER_SHARD = 3;
+    
+    try {
+        const claimTokensPromises: Promise<void>[] = [];
+        for (let shardId = 0; shardId < SHARD_COUNT; shardId++) {
+            for (let walletIndex = 1; walletIndex <= WALLETS_PER_SHARD; walletIndex++) {
+                claimTokensPromises.push(claimTokensWallets(shardId, walletIndex));
+            }
+        }
+        await Promise.all(claimTokensPromises);        
+        console.log("All tokens have been claimed successfully!");
+    } catch (error) {
+        console.error("Error during parallel token claims:", error);
     }
 }
 
