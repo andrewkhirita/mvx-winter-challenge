@@ -9,9 +9,7 @@ import {
     Account,
     SmartContractTransactionsFactory,
     U8Value,
-    StringValue,
     BigUIntValue,
-    BooleanValue,
     TokenIdentifierValue,
 } from '@multiversx/sdk-core';
 
@@ -20,7 +18,7 @@ const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlaa66qc2uapx5ef79a4csqu2cgqpr0ty6dkq
 const FUNCTION = "burnTokens";
 
 const TICKER = "SNOW-44d7a4";
-const NONCE = 0; //standard for all esdts
+const NONCE = 0; 
 const CHAIN_ID = "D";
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);
@@ -61,7 +59,6 @@ async function burnTokens(
     console.log("Transaction hash:", txHash);
 }
   
-
 async function loadWallet(walletPath: string): Promise<UserSigner> {
     const walletJson = JSON.parse(fs.readFileSync(walletPath, 'utf8'));
     return UserSigner.fromWallet(walletJson, 'password');
