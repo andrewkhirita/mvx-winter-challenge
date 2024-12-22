@@ -1,6 +1,6 @@
-/Users/andrewkhirita/Desktop/mvx-winter-challenge/staking/target/debug/deps/libstaking-42850ee46fde7066.rmeta: src/staking.rs
+/Users/andrewkhirita/Desktop/mvx-winter-challenge/staking_sc/target/debug/deps/libstaking-42850ee46fde7066.rmeta: src/staking.rs
 
-/Users/andrewkhirita/Desktop/mvx-winter-challenge/staking/target/debug/deps/staking-42850ee46fde7066.d: src/staking.rs
+/Users/andrewkhirita/Desktop/mvx-winter-challenge/staking_sc/target/debug/deps/staking-42850ee46fde7066.d: src/staking.rs
 
 src/staking.rs:
 
