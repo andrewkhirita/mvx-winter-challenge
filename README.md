@@ -2,19 +2,19 @@
 
 ## 🎯 Challenge Progress
 
-1. [x] Generate MultiversX wallets
-2. [ ] Challenge 2
-3. [ ] Challenge 3
-4. [ ] Challenge 4
-5. [ ] Challenge 5
-6. [ ] Challenge 6
-7. [ ] Challenge 7
-8. [ ] Challenge 8
-9. [ ] Challenge 9
-10. [ ] Challenge 10
-11. [ ] Challenge 11
-12. [ ] Challenge 12
-13. [ ] Challenge 13
+1. [x] Challenge 1
+2. [x] Challenge 2
+3. [x] Challenge 3
+4. [x] Challenge 4
+5. [x] Challenge 5
+6. [x] Challenge 6
+7. [x] Challenge 7
+8. [x] Challenge 8
+9. [x] Challenge 9
+10. [x] Challenge 10
+11. [x] Challenge 11
+12. [x] Challenge 12
+13. [x] Challenge 13
 14. [ ] Challenge 14
 15. [ ] Challenge 15
 16. [ ] Challenge 16
@@ -25,7 +25,6 @@
 21. [ ] Challenge 21
 22. [ ] Challenge 22
 23. [ ] Challenge 23
-24. [ ] Challenge 24
 
 ## 🔗 Official Links
 - [MultiversX Official Website](https://multiversx.com/)
