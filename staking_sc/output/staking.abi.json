@@ -21,10 +21,6 @@
         "inputs": [],
         "outputs": []
     },
-    "upgradeConstructor": {
-        "inputs": [],
-        "outputs": []
-    },
     "endpoints": [
         {
             "name": "stakeTokenWinter",
@@ -41,30 +37,15 @@
             "outputs": []
         },
         {
-            "name": "getMinStakeEpochs",
-            "mutability": "readonly",
-            "inputs": [],
-            "outputs": [
-                {
-                    "type": "u64"
-                }
-            ]
-        },
-        {
-            "name": "getStakeDuration",
-            "mutability": "readonly",
+            "name": "changeRewardsRecipient",
+            "mutability": "mutable",
             "inputs": [
                 {
-                    "name": "address",
+                    "name": "new_recipient",
                     "type": "Address"
                 }
             ],
-            "outputs": [
-                {
-                    "type": "optional<u64>",
-                    "multi_result": true
-                }
-            ]
+            "outputs": []
         },
         {
             "name": "lockedTokenAmount",
@@ -91,10 +72,30 @@
                     "multi_result": true
                 }
             ]
+        },
+        {
+            "name": "getRewardTokenId",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "TokenIdentifier"
+                }
+            ]
+        },
+        {
+            "name": "getRewardsRecipient",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "Address"
+                }
+            ]
         }
     ],
     "esdtAttributes": [],
-    "hasCallback": false,
+    "hasCallback": true,
     "types": {
         "EgldOrEsdtTokenPayment": {
             "type": "struct",

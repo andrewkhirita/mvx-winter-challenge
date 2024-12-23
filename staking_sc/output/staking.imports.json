@@ -1,9 +1,15 @@
 [
   "bigIntAdd",
   "bigIntFinishUnsigned",
+  "bigIntMul",
+  "bigIntSetInt64",
   "bigIntSign",
+  "bigIntTDiv",
   "checkNoPayment",
+  "cleanReturnData",
   "getBlockEpoch",
+  "getBlockNonce",
+  "getGasLeft",
   "getNumArguments",
   "mBufferAppend",
   "mBufferAppendBytes",
@@ -18,8 +24,14 @@
   "mBufferStorageLoad",
   "mBufferStorageStore",
   "mBufferToBigIntUnsigned",
+  "managedAsyncCall",
   "managedCaller",
+  "managedExecuteOnDestContext",
+  "managedGetOriginalTxHash",
+  "managedMultiTransferESDTNFTExecute",
+  "managedOwnerAddress",
+  "managedSCAddress",
   "managedSignalError",
   "signalError",
-  "smallIntFinishUnsigned"
+  "smallIntGetUnsignedArgument"
 ]

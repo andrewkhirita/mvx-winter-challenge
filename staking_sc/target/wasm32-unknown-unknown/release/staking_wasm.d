@@ -1,1 +1,1 @@
-/Users/andrewkhirita/Desktop/mvx-winter-challenge/staking/target/wasm32-unknown-unknown/release/staking_wasm.wasm: /Users/andrewkhirita/Desktop/mvx-winter-challenge/staking/src/staking.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/staking/wasm/src/lib.rs
+/Users/andrewkhirita/Desktop/mvx-winter-challenge/staking_sc/target/wasm32-unknown-unknown/release/staking_wasm.wasm: /Users/andrewkhirita/Desktop/mvx-winter-challenge/staking_sc/src/staking.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/staking_sc/wasm/src/lib.rs

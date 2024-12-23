@@ -2,6 +2,17 @@
 multiversx_sc::imports!();
 multiversx_sc::derive_imports!();
 
+////////////////////////////////////////////////////////////
+// Challenge 1 - Token Issuance
+// Requirements:
+// - Single endpoint "issue_token_snow"
+// - Payable in EGLD
+// - Token ticker "SNOW"
+// - 8 decimals
+// - No property restrictions
+// - Open source
+////////////////////////////////////////////////////////////
+
 #[multiversx_sc::contract]
 pub trait Snow {
     #[upgrade]
@@ -10,6 +21,9 @@ pub trait Snow {
     #[init]
     fn init(&self) {}
 
+    // Main token issuance endpoint
+    // Allows users to issue tokens by paying EGLD
+    // Token properties are customizable except decimals (8)
     #[payable("EGLD")]
     #[endpoint(issueTokenSnow)]
     fn issue_token(
@@ -53,6 +67,8 @@ pub trait Snow {
             .call_and_exit();
     }
 
+    // Callback for token issuance
+    // Tracks issued tokens and balances per user
     #[callback]
     fn issue_callback(
         &self,
@@ -76,27 +92,37 @@ pub trait Snow {
         }
     }
 
-     //Challenge - 6
-     #[endpoint(burnTokens)]
-     fn burn_tokens(
-         &self,
-         token_identifier: TokenIdentifier,
-         token_nonce: u64,
-         amount: BigUint,
-     ) {
-         let current_balance = self.token_balance(&token_identifier).get();
-         require!(
-             current_balance >= amount, "Insufficient balance for burning"
-         );
-         self.token_balance(&token_identifier).set(&(current_balance - &amount));
-         self.send().esdt_local_burn(
-             &token_identifier,
-             token_nonce,
-             &amount,
-         );
-     }
+    ////////////////////////////////////////////////////////////
+    // Challenge 2 - Token Burning
+    // Requirements:
+    // - Allow burning of held tokens
+    // - Verifiable through ABI and contract code
+    ////////////////////////////////////////////////////////////
+    #[endpoint(burnTokens)]
+    fn burn_tokens(
+        &self,
+        token_identifier: TokenIdentifier,
+        token_nonce: u64,
+        amount: BigUint,
+    ) {
+        let current_balance = self.token_balance(&token_identifier).get();
+        require!(
+            current_balance >= amount, "Insufficient balance for burning"
+        );
+        self.token_balance(&token_identifier).set(&(current_balance - &amount));
+        self.send().esdt_local_burn(
+            &token_identifier,
+            token_nonce,
+            &amount,
+        );
+    }
 
-    //Challenge - 7
+    ////////////////////////////////////////////////////////////
+    // Challenge 3 - Token Query Endpoints
+    // Requirements:
+    // - View endpoints to check token balances
+    // - Track issued tokens and balances
+    ////////////////////////////////////////////////////////////
     #[view(getAllUsersTokens)]
     fn get_all_user_tokens(&self, address: &ManagedAddress) -> MultiValueEncoded<TokenIdentifier> {
         let mut result = MultiValueEncoded::new();
@@ -130,7 +156,13 @@ pub trait Snow {
        self.token_balance(&token_id).get()
     }
 
-    //Challenge - 8
+    ////////////////////////////////////////////////////////////
+    // Challenge 4 & 5 - Token Claiming
+    // Requirements:
+    // - Allow users to claim their tokens
+    // - Endpoint named "claim_tokens"
+    // - Sends minted tokens to caller
+    ////////////////////////////////////////////////////////////
     #[endpoint(claimUserTokens)]
     fn claim_user_tokens(&self, token_identifier: TokenIdentifier) {
         let caller = self.blockchain().get_caller();
@@ -148,7 +180,6 @@ pub trait Snow {
         self.claimable_amount(&caller).clear();
     }
 
-    //Challenge - 9
     #[endpoint(claimTokens)]
     fn claim_tokens(&self) {
         let caller = self.blockchain().get_caller();
@@ -171,6 +202,7 @@ pub trait Snow {
         }
     }
 
+    // Storage mappers for tracking tokens and balances
     #[storage_mapper("tokenToClaim")]
     fn token_to_claim(&self) -> SingleValueMapper<TokenIdentifier>;
 
