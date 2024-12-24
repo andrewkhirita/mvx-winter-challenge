@@ -21,6 +21,10 @@
         "inputs": [],
         "outputs": []
     },
+    "upgradeConstructor": {
+        "inputs": [],
+        "outputs": []
+    },
     "endpoints": [
         {
             "name": "stakeTokenWinter",
@@ -28,16 +32,18 @@
             "payableInTokens": [
                 "*"
             ],
-            "inputs": [
-                {
-                    "name": "payment",
-                    "type": "EgldOrEsdtTokenPayment"
-                }
-            ],
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "claimRewards",
+            "mutability": "mutable",
+            "inputs": [],
             "outputs": []
         },
         {
             "name": "changeRewardsRecipient",
+            "onlyOwner": true,
             "mutability": "mutable",
             "inputs": [
                 {
@@ -46,73 +52,9 @@
                 }
             ],
             "outputs": []
-        },
-        {
-            "name": "lockedTokenAmount",
-            "mutability": "readonly",
-            "inputs": [
-                {
-                    "name": "addr",
-                    "type": "Address"
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "BigUint"
-                }
-            ]
-        },
-        {
-            "name": "lockedTokens",
-            "mutability": "readonly",
-            "inputs": [],
-            "outputs": [
-                {
-                    "type": "variadic<Address>",
-                    "multi_result": true
-                }
-            ]
-        },
-        {
-            "name": "getRewardTokenId",
-            "mutability": "readonly",
-            "inputs": [],
-            "outputs": [
-                {
-                    "type": "TokenIdentifier"
-                }
-            ]
-        },
-        {
-            "name": "getRewardsRecipient",
-            "mutability": "readonly",
-            "inputs": [],
-            "outputs": [
-                {
-                    "type": "Address"
-                }
-            ]
         }
     ],
     "esdtAttributes": [],
-    "hasCallback": true,
-    "types": {
-        "EgldOrEsdtTokenPayment": {
-            "type": "struct",
-            "fields": [
-                {
-                    "name": "token_identifier",
-                    "type": "EgldOrEsdtTokenIdentifier"
-                },
-                {
-                    "name": "token_nonce",
-                    "type": "u64"
-                },
-                {
-                    "name": "amount",
-                    "type": "BigUint"
-                }
-            ]
-        }
-    }
+    "hasCallback": false,
+    "types": {}
 }

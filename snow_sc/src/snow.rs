@@ -10,7 +10,6 @@ multiversx_sc::derive_imports!();
 // - Token ticker "SNOW"
 // - 8 decimals
 // - No property restrictions
-// - Open source
 ////////////////////////////////////////////////////////////
 
 #[multiversx_sc::contract]
@@ -160,7 +159,6 @@ pub trait Snow {
     // Challenge 4 & 5 - Token Claiming
     // Requirements:
     // - Allow users to claim their tokens
-    // - Endpoint named "claim_tokens"
     // - Sends minted tokens to caller
     ////////////////////////////////////////////////////////////
     #[endpoint(claimUserTokens)]
