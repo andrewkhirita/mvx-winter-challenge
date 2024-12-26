@@ -6,9 +6,9 @@
 
 // Init:                                 1
 // Upgrade:                              1
-// Endpoints:                            3
-// Async Callback (empty):               1
-// Total number of exported functions:   6
+// Endpoints:                            4
+// Async Callback:                       1
+// Total number of exported functions:   7
 
 #![no_std]
 
@@ -22,8 +22,9 @@ multiversx_sc_wasm_adapter::endpoints! {
         upgrade => upgrade
         stakeTokenWinter => stake_token_winter
         claimRewards => claim_rewards
-        changeRewardsRecipient => change_rewards_recipient
+        setRewardRecipient => set_reward_recipient
+        issueTokenSnow => issue_token
     )
 }
 
-multiversx_sc_wasm_adapter::async_callback_empty! {}
+multiversx_sc_wasm_adapter::async_callback! { staking }

@@ -42,19 +42,89 @@
             "outputs": []
         },
         {
-            "name": "changeRewardsRecipient",
-            "onlyOwner": true,
+            "name": "setRewardRecipient",
             "mutability": "mutable",
             "inputs": [
                 {
-                    "name": "new_recipient",
+                    "name": "recipient",
                     "type": "Address"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "issueTokenSnow",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "EGLD"
+            ],
+            "inputs": [
+                {
+                    "name": "token_name",
+                    "type": "bytes"
+                },
+                {
+                    "name": "token_ticker",
+                    "type": "bytes"
+                },
+                {
+                    "name": "num_decimals",
+                    "type": "u32"
+                },
+                {
+                    "name": "initial_supply",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "can_freeze",
+                    "type": "bool"
+                },
+                {
+                    "name": "can_wipe",
+                    "type": "bool"
+                },
+                {
+                    "name": "can_pause",
+                    "type": "bool"
+                },
+                {
+                    "name": "can_add_special_roles",
+                    "type": "bool"
+                },
+                {
+                    "name": "can_burn",
+                    "type": "bool"
+                },
+                {
+                    "name": "can_mint",
+                    "type": "bool"
                 }
             ],
             "outputs": []
         }
     ],
+    "events": [
+        {
+            "identifier": "issue_token",
+            "inputs": [
+                {
+                    "name": "caller",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "token_ticker",
+                    "type": "bytes",
+                    "indexed": true
+                },
+                {
+                    "name": "initial_supply",
+                    "type": "BigUint"
+                }
+            ]
+        }
+    ],
     "esdtAttributes": [],
-    "hasCallback": false,
+    "hasCallback": true,
     "types": {}
 }

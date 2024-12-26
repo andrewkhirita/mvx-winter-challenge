@@ -15,7 +15,7 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlaa66qc2uapx5ef79a4csqu2cgqpr0ty6dkqpl73p8";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgql8r5403fml0v8pg80wtnzqu68ag6gzwa6dkqtm3yxp";
 const FUNCTION = "issueTokenSnow";
 const TOKEN_NAME = "SnowX";
 const TICKER = "SNOW";
@@ -87,11 +87,11 @@ async function issueTokenForWallet(shardId: number, walletIndex: number): Promis
 
 async function main() {
     const SHARD_COUNT = 3;
-    const WALLETS_PER_SHARD = 3;
+    const WALLETS_PER_SHARD = 1;
     
     try {
         const issuancePromises: Promise<void>[] = [];
-        for (let shardId = 0; shardId < SHARD_COUNT; shardId++) {
+        for (let shardId = 0; shardId <= 0; shardId++) {
             for (let walletIndex = 1; walletIndex <= WALLETS_PER_SHARD; walletIndex++) {
                 issuancePromises.push(issueTokenForWallet(shardId, walletIndex));
             }
