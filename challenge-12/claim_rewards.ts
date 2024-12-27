@@ -12,8 +12,8 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqh8eeqsk9g82gqq6yumlqyj4cjhsnpwna6dkq0muyh8";
-const FUNCTION = "setLocalRoles";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqw2guuvqhze7pz3kexjc84dlsq7tym3776dkq5mkptd";
+const FUNCTION = "claimRewards";
 const CHAIN_ID = "D";
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);
@@ -34,7 +34,7 @@ async function claimRewards(
         sender: address,
         contract: Address.fromBech32(SMART_CONTRACT),
         function: FUNCTION,
-        gasLimit: BigInt(500000000),
+        gasLimit: BigInt(50000000),
     });
     
     const nonce = account.getNonceThenIncrement();
@@ -61,9 +61,9 @@ async function main() {
       const signer = await loadWallet(walletPath);
       await claimRewards(signer);
 
-      console.log("Tokens have been burned successfully");
+      console.log("Rewards was succesfully claimed!");
     } catch (error) {
-      console.error("Error during burn token:", error);
+      console.error("Error during claiming rewards:", error);
     }
 }
 

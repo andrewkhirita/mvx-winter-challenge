@@ -9,10 +9,12 @@ import {
     Account,
     SmartContractTransactionsFactory,
     TokenTransfer,
+    StringValue,
+    TokenIdentifierValue,
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqh8eeqsk9g82gqq6yumlqyj4cjhsnpwna6dkq0muyh8";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqw2guuvqhze7pz3kexjc84dlsq7tym3776dkq5mkptd";
 const FUNCTION = "stakeTokenWinter";
 const CHAIN_ID = "D";
 
@@ -58,6 +60,39 @@ async function stakeTokenWinter(
   
     const txHash = await apiNetworkProvider.sendTransaction(transaction);
     console.log("Transaction hash:", txHash);
+}
+
+  async function issueToken(
+    signer: UserSigner,
+  ): Promise<void> {  
+    const userAddress = signer.getAddress().toString();
+    const address = Address.fromBech32(userAddress);
+  
+    const account = new Account(address);
+    const accountOnNetwork = await apiNetworkProvider.getAccount(address);
+    account.update(accountOnNetwork);
+
+    let args = [new StringValue("SnowMvx"), new TokenIdentifierValue("SNOW")];
+  
+    const transaction = factory.createTransactionForExecute({
+      sender: address,
+      contract: Address.fromBech32(SMART_CONTRACT),
+      function: FUNCTION,
+      gasLimit: BigInt(60000000),
+      arguments: args,
+      nativeTransferAmount:BigInt(50000000000000000)
+    });
+    
+    const nonce = account.getNonceThenIncrement();
+    transaction.nonce = BigInt(nonce.valueOf());
+  
+    const transactionComputer = new TransactionComputer();
+    const serializedTransaction = transactionComputer.computeBytesForSigning(transaction);
+    const signature = await signer.sign(serializedTransaction);
+    transaction.signature = signature;
+  
+    const txHash = await apiNetworkProvider.sendTransaction(transaction);
+    console.log("Transaction hash:", txHash);
   }
   
 async function loadWallet(walletPath: string): Promise<UserSigner> {
@@ -72,9 +107,9 @@ async function main() {
       const signer = await loadWallet(walletPath);
       await stakeTokenWinter(signer);
 
-      console.log("Tokens have been burned successfully");
+      console.log("The staking process was succesfully completed!");
     } catch (error) {
-      console.error("Error during burn token:", error);
+      console.error("Error during staking token:", error);
     }
 }
 

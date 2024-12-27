@@ -23,7 +23,7 @@ multiversx_sc_wasm_adapter::endpoints! {
         stakeTokenWinter => stake_token_winter
         claimRewards => claim_rewards
         setRewardRecipient => set_reward_recipient
-        issueTokenSnow => issue_token
+        issueToken => issue_token
     )
 }
 

@@ -1,7 +1,7 @@
 [
   "bigIntAdd",
+  "bigIntCmp",
   "bigIntGetCallValue",
-  "bigIntGetUnsignedArgument",
   "bigIntSetInt64",
   "bigIntSign",
   "bigIntTDiv",
@@ -31,9 +31,10 @@
   "managedGetMultiESDTCallValue",
   "managedGetOriginalTxHash",
   "managedMultiTransferESDTNFTExecute",
+  "managedOwnerAddress",
   "managedSCAddress",
   "managedSignalError",
-  "managedWriteLog",
   "signalError",
-  "smallIntGetUnsignedArgument"
+  "smallIntGetUnsignedArgument",
+  "validateTokenIdentifier"
 ]
