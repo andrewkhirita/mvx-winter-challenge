@@ -8,16 +8,14 @@ import {
     TransactionComputer,
     Account,
     SmartContractTransactionsFactory,
-    U8Value,
     StringValue,
     BigUIntValue,
-    BooleanValue,
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlaa66qc2uapx5ef79a4csqu2cgqpr0ty6dkqpl73p8";
-const FUNCTION = "issueTokenSnow";
-const TOKEN_NAME = "SnowX";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlgjncgpllaf4qcznr3atj525elzsg0eh6dkq9xrt3f";
+const FUNCTION = "issueToken";
+const TOKEN_NAME = "SnowXmass";
 const TICKER = "SNOW";
 const CHAIN_ID = "D";
 
@@ -31,7 +29,7 @@ const factory = new SmartContractTransactionsFactory({config:config});
 async function issueToken(
     signer: UserSigner,
     tokenName: string,
-    tokenTicker: string
+    tokenTicker: string,
 ): Promise<void> {
     const userAddress = signer.getAddress().toString();
     const address = Address.fromBech32(userAddress);
@@ -40,14 +38,13 @@ async function issueToken(
     const accountOnNetwork = await apiNetworkProvider.getAccount(address);
     account.update(accountOnNetwork);
 
-    let args = [new StringValue(tokenName), new StringValue(tokenTicker), new U8Value(8), new BigUIntValue(TOTAL_SUPPLY), 
-        new BooleanValue(true), new BooleanValue(false), new BooleanValue(false), new BooleanValue(true), new BooleanValue(true), new BooleanValue(true)];
+    let args = [new StringValue(tokenName),new StringValue(tokenTicker), new BigUIntValue(TOTAL_SUPPLY)];
     
     const transaction = factory.createTransactionForExecute({
         sender: address,
         contract: Address.fromBech32(SMART_CONTRACT),
         function: FUNCTION,
-        gasLimit: BigInt(60000000),
+        gasLimit: BigInt(100000000),
         arguments: args,
         nativeTransferAmount: BigInt(EGLD_FEE)
     });
@@ -87,11 +84,11 @@ async function issueTokenForWallet(shardId: number, walletIndex: number): Promis
 
 async function main() {
     const SHARD_COUNT = 3;
-    const WALLETS_PER_SHARD = 1;
+    const WALLETS_PER_SHARD = 3;
     
     try {
         const issuancePromises: Promise<void>[] = [];
-        for (let shardId = 0; shardId <= 0; shardId++) {
+        for (let shardId = 0; shardId <= SHARD_COUNT; shardId++) {
             for (let walletIndex = 1; walletIndex <= WALLETS_PER_SHARD; walletIndex++) {
                 issuancePromises.push(issueTokenForWallet(shardId, walletIndex));
             }

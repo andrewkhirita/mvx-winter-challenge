@@ -5,13 +5,12 @@
 ////////////////////////////////////////////////////
 
 // Init:                                 1
-// Endpoints:                            8
+// Upgrade:                              1
+// Endpoints:                            4
 // Async Callback:                       1
-// Total number of exported functions:  10
+// Total number of exported functions:   7
 
 #![no_std]
-#![allow(internal_features)]
-#![feature(lang_items)]
 
 multiversx_sc_wasm_adapter::allocator!();
 multiversx_sc_wasm_adapter::panic_handler!();
@@ -21,12 +20,9 @@ multiversx_sc_wasm_adapter::endpoints! {
     (
         init => init
         upgrade => upgrade
-        issueTokenSnow => issue_token
+        issueToken => issue_token
         burnTokens => burn_tokens
-        getAllUsersTokens => get_all_user_tokens
-        getAllUserTokenBalances => get_all_user_token_balances
-        getSingleTokenBalance => get_single_token_balance
-        claimUserTokens => claim_user_tokens
+        getTokens => get_tokens
         claimTokens => claim_tokens
     )
 }

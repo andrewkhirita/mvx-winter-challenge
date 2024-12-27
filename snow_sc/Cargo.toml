@@ -9,13 +9,13 @@ publish = false
 path = "src/snow.rs"
 
 [dependencies.multiversx-sc]
-version = "0.46.1"
+version = "0.54.6"
 
 [dev-dependencies]
 num-bigint = "0.4.2"
 
 [dev-dependencies.multiversx-sc-scenario]
-version = "0.46.1"
+version = "0.54.6"
 
 [workspace]
 members = [

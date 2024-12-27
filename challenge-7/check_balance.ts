@@ -12,8 +12,8 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlaa66qc2uapx5ef79a4csqu2cgqpr0ty6dkqpl73p8";
-const FUNCTION = "getAllUserTokenBalances";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlgjncgpllaf4qcznr3atj525elzsg0eh6dkq9xrt3f";
+const FUNCTION = "getTokens";
 const CHAIN_ID = "D";
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);
@@ -30,14 +30,14 @@ async function getAllUserTokenBalances(
     const accountOnNetwork = await apiNetworkProvider.getAccount(address);
     account.update(accountOnNetwork);
 
-    let args = [new AddressValue(address)];
+    // let args = [new AddressValue(address)];
       
     const transaction = factory.createTransactionForExecute({
         sender: address,
         contract: Address.fromBech32(SMART_CONTRACT),
         function: FUNCTION,
         gasLimit: BigInt(5000000),
-        arguments: args,
+        // arguments: args,
     });
     
     const nonce = account.getNonceThenIncrement();

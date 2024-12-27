@@ -14,11 +14,10 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlaa66qc2uapx5ef79a4csqu2cgqpr0ty6dkqpl73p8";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlgjncgpllaf4qcznr3atj525elzsg0eh6dkq9xrt3f";
 const FUNCTION = "burnTokens";
 
-const TICKER = "SNOW-44d7a4";
-const NONCE = 0; 
+const TICKER = "SNOW-c6e2fb";
 const CHAIN_ID = "D";
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);
@@ -37,13 +36,13 @@ async function burnTokens(
     const accountOnNetwork = await apiNetworkProvider.getAccount(address);
     account.update(accountOnNetwork);
   
-    let args = [tokenIdentifier, new U8Value(NONCE), amount];
+    let args = [tokenIdentifier, amount];
     
     const transaction = factory.createTransactionForExecute({
         sender: address,
         contract: Address.fromBech32(SMART_CONTRACT),
         function: FUNCTION,
-        gasLimit: BigInt(5000000),
+        gasLimit: BigInt(10000000),
         arguments: args,
     });
     
@@ -70,7 +69,7 @@ async function main() {
       const tokenTicker = `${TICKER}`;
       
       const signer = await loadWallet(walletPath);
-      await burnTokens(signer, new TokenIdentifierValue(tokenTicker), new BigUIntValue(500000000000000000));
+      await burnTokens(signer, new TokenIdentifierValue(tokenTicker), new BigUIntValue(50000000000000000));
 
       console.log("Tokens have been burned successfully");
     } catch (error) {
