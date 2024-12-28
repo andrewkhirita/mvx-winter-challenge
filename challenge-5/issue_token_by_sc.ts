@@ -13,13 +13,13 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlgjncgpllaf4qcznr3atj525elzsg0eh6dkq9xrt3f";
-const FUNCTION = "issueToken";
-const TOKEN_NAME = "SnowXmass";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgq2tpr8nlmvzym0c55xmwvs3r9ktzmvc7v6dkq0cvzpx";
+const FUNCTION = "issueTokenSnow";
+const TOKEN_NAME = "SnowXwAs";
 const TICKER = "SNOW";
 const CHAIN_ID = "D";
 
-const TOTAL_SUPPLY = 50000000000000000000;
+const TOTAL_SUPPLY = 15000000000000000000;
 const EGLD_FEE = 50000000000000000;
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);

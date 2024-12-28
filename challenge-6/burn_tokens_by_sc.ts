@@ -14,10 +14,11 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqlgjncgpllaf4qcznr3atj525elzsg0eh6dkq9xrt3f";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgq2tpr8nlmvzym0c55xmwvs3r9ktzmvc7v6dkq0cvzpx";
 const FUNCTION = "burnTokens";
 
-const TICKER = "SNOW-c6e2fb";
+const TICKER = "SNOW-fcbc56";
+const AMOUNT = 100000000000000000;
 const CHAIN_ID = "D";
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);
@@ -69,7 +70,7 @@ async function main() {
       const tokenTicker = `${TICKER}`;
       
       const signer = await loadWallet(walletPath);
-      await burnTokens(signer, new TokenIdentifierValue(tokenTicker), new BigUIntValue(50000000000000000));
+      await burnTokens(signer, new TokenIdentifierValue(tokenTicker), new BigUIntValue(AMOUNT));
 
       console.log("Tokens have been burned successfully");
     } catch (error) {

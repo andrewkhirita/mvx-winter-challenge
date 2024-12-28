@@ -27,7 +27,7 @@
     },
     "endpoints": [
         {
-            "name": "issueToken",
+            "name": "issueTokenSnow",
             "mutability": "mutable",
             "payableInTokens": [
                 "EGLD"
@@ -53,7 +53,7 @@
             "mutability": "mutable",
             "inputs": [
                 {
-                    "name": "token_id",
+                    "name": "token_identifier",
                     "type": "TokenIdentifier"
                 },
                 {
@@ -64,14 +64,62 @@
             "outputs": []
         },
         {
-            "name": "getTokens",
+            "name": "getAllUsersTokens",
             "mutability": "readonly",
-            "inputs": [],
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
             "outputs": [
                 {
-                    "type": "TokenIdentifier"
+                    "type": "variadic<TokenIdentifier>",
+                    "multi_result": true
                 }
             ]
+        },
+        {
+            "name": "getAllUserTokenBalances",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "variadic<tuple<TokenIdentifier,BigUint>>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "getSingleTokenBalance",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "token_id",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "claimUserTokens",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
         },
         {
             "name": "claimTokens",
