@@ -66,7 +66,6 @@ pub trait Gold {
         self.pending_resources(&caller).clear();
     }
 
-    // Storage
     #[view(getTokenId)]
     #[storage_mapper("tokenId")]
     fn token_id(&self) -> SingleValueMapper<TokenIdentifier>;

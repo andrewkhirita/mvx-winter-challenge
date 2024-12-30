@@ -1,0 +1,1 @@
+/Users/andrewkhirita/Desktop/mvx-winter-challenge/gold_resource_sc/target/wasm32-unknown-unknown/release/gold_wasm.wasm: /Users/andrewkhirita/Desktop/mvx-winter-challenge/gold_resource_sc/src/gold.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/gold_resource_sc/wasm/src/lib.rs

@@ -1,0 +1,1 @@
+/Users/andrewkhirita/Desktop/mvx-winter-challenge/food_resource_sc/target/wasm32-unknown-unknown/release/food_wasm.wasm: /Users/andrewkhirita/Desktop/mvx-winter-challenge/food_resource_sc/src/food.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/food_resource_sc/wasm/src/lib.rs

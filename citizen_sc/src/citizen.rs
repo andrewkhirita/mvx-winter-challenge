@@ -17,10 +17,9 @@ pub trait Citizen {
     fn mint_citizen(&self) {
         let payments = self.call_value().all_esdt_transfers();
         let caller = self.blockchain().get_caller();
-        
         let mut wood_amount = BigUint::zero();
         let mut food_amount = BigUint::zero();
-        
+
         for payment in payments.iter() {
             match payment.token_identifier.as_managed_buffer().to_boxed_bytes().as_slice() {
                 b"WOOD" => wood_amount += &payment.amount,
@@ -28,28 +27,28 @@ pub trait Citizen {
                 _ => sc_panic!("Invalid token")
             }
         }
-        
+
         require!(wood_amount >= WOOD_REQUIRED, "Not enough WOOD");
         require!(food_amount >= FOOD_REQUIRED, "Not enough FOOD");
-        
+
         // Burn the resources
         self.send().esdt_local_burn(&TokenIdentifier::from_esdt_bytes(b"WOOD"), 0, &wood_amount);
         self.send().esdt_local_burn(&TokenIdentifier::from_esdt_bytes(b"FOOD"), 0, &food_amount);
-        
+
         // Store mint request
         let claim_block = self.blockchain().get_block_nonce() + BLOCKS_IN_HOUR;
         self.pending_claims(&caller).set(&claim_block);
     }
-    
+
     #[endpoint(claimCitizen)]
     fn claim_citizen(&self) {
         let caller = self.blockchain().get_caller();
         let claim_block = self.pending_claims(&caller).get();
         let current_block = self.blockchain().get_block_nonce();
-        
+
         require!(current_block >= claim_block, "Too early to claim");
-        require!(self.citizen_token_id().is_empty(), "Token not issued yet");
-        
+        require!(!self.citizen_token_id().is_empty(), "Token not issued yet");
+
         let nonce = self.next_nonce().get();
         self.send().esdt_nft_create(
             &self.citizen_token_id().get(),
@@ -60,13 +59,24 @@ pub trait Citizen {
             &Empty,
             &ManagedVec::new(),
         );
-        
+
+        // Send the NFT to the caller
+        self.send().direct_esdt(
+            &caller,
+            &self.citizen_token_id().get(),
+            nonce,
+            &BigUint::from(1u64)
+        );
+
         self.next_nonce().update(|val| *val += 1);
         self.pending_claims(&caller).clear();
     }
 
     #[callback]
-    fn citizen_token_callback(&self, #[call_result] result: ManagedAsyncCallResult<TokenIdentifier>) {
+    fn citizen_token_callback(
+        &self,
+        #[call_result] result: ManagedAsyncCallResult<TokenIdentifier>
+    ) {
         match result {
             ManagedAsyncCallResult::Ok(token_id) => {
                 self.citizen_token_id().set(&token_id);
@@ -82,17 +92,25 @@ pub trait Citizen {
             .issue_non_fungible(
                 &ManagedBuffer::from(b"CITIZEN"),
                 &ManagedBuffer::from(b"CITIZEN"),
-                NonFungibleTokenProperties::new()
+                &BigUint::zero(),
+                NonFungibleTokenProperties {
+                    can_freeze: true,
+                    can_wipe: true,
+                    can_pause: true,
+                    can_change_owner: true,
+                    can_upgrade: true,
+                    can_add_special_roles: true,
+                    can_transfer_create_role: true
+                }
             )
-            .async_call()
             .with_callback(self.callbacks().citizen_token_callback())
-            .call_and_exit()
+            .async_call_and_exit()
     }
 
     #[storage_mapper("citizenTokenId")]
     fn citizen_token_id(&self) -> SingleValueMapper<TokenIdentifier>;
 
-    #[storage_mapper("nextNonce")] 
+    #[storage_mapper("nextNonce")]
     fn next_nonce(&self) -> SingleValueMapper<u64>;
 
     #[storage_mapper("pendingClaims")]

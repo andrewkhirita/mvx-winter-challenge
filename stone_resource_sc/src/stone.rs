@@ -11,7 +11,7 @@ pub trait Stone {
     #[upgrade]
     fn upgrade(&self) {}
 
-    #[payable("WINTER")]
+    #[payable("*")]
     #[endpoint(stakeWinter)]
     fn stake_winter(&self) {
         let payment = self.call_value().single_esdt();

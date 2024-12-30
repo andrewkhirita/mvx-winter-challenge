@@ -1,0 +1,1 @@
+/Users/andrewkhirita/Desktop/mvx-winter-challenge/food_resource_sc/target/debug/food-meta: /Users/andrewkhirita/Desktop/mvx-winter-challenge/food_resource_sc/meta/src/main.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/food_resource_sc/src/food.rs
