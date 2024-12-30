@@ -1,0 +1,64 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.85.0-nightly",
+            "commitHash": "6d9f6ae36ae1299d6126ba40c15191f7aa3b79d8",
+            "commitDate": "2024-12-16",
+            "channel": "Nightly",
+            "short": "rustc 1.85.0-nightly (6d9f6ae36 2024-12-16)"
+        },
+        "contractCrate": {
+            "name": "wood",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "multiversx-sc",
+            "version": "0.54.6"
+        }
+    },
+    "name": "Wood",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "upgradeConstructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "stakeWinter",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "generateResources",
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "claimResources",
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "getTokenId",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "TokenIdentifier"
+                }
+            ]
+        }
+    ],
+    "esdtAttributes": [],
+    "hasCallback": false,
+    "types": {}
+}

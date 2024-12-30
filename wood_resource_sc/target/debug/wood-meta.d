@@ -1,0 +1,1 @@
+/Users/andrewkhirita/Desktop/mvx-winter-challenge/wood_resource_sc/target/debug/wood-meta: /Users/andrewkhirita/Desktop/mvx-winter-challenge/wood_resource_sc/meta/src/main.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/wood_resource_sc/src/wood.rs

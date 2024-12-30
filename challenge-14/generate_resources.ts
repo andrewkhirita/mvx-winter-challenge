@@ -10,16 +10,57 @@ import {
     SmartContractTransactionsFactory,
     TokenIdentifierValue,
     AddressValue,
+    TokenTransfer,
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqfm5tfgr9pksl9kdsqqgekxyc87daxsyw6dkqqx2sge";
+const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqcs54gq36d6lgc4q57jpsu8veys7xe27k6dkqaswnpz";
 const FUNCTION = "generateResources";
 const CHAIN_ID = "D";
+
+const TOKEN_ID = "WINTER-4b4989";
+const AMOUNT = "1000";
+const numDecimals = 8;
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);
 const config = new TransactionsFactoryConfig({ chainID: CHAIN_ID});
 const factory = new SmartContractTransactionsFactory({config:config});
+
+async function stakeTokenWinter(
+  signer: UserSigner,
+): Promise<void> {  
+  const userAddress = signer.getAddress().toString();
+  const address = Address.fromBech32(userAddress);
+
+  const account = new Account(address);
+  const accountOnNetwork = await apiNetworkProvider.getAccount(address);
+  account.update(accountOnNetwork);
+
+  const payment = TokenTransfer.fungibleFromAmount(
+    TOKEN_ID,
+    AMOUNT,
+    numDecimals
+  );
+
+  const transaction = factory.createTransactionForExecute({
+    sender: address,
+    contract: Address.fromBech32(SMART_CONTRACT),
+    function: FUNCTION,
+    gasLimit: BigInt(5000000),
+    tokenTransfers: [payment]
+  });
+  
+  const nonce = account.getNonceThenIncrement();
+  transaction.nonce = BigInt(nonce.valueOf());
+
+  const transactionComputer = new TransactionComputer();
+  const serializedTransaction = transactionComputer.computeBytesForSigning(transaction);
+  const signature = await signer.sign(serializedTransaction);
+  transaction.signature = signature;
+
+  const txHash = await apiNetworkProvider.sendTransaction(transaction);
+  console.log("Transaction hash:", txHash);
+}
 
 async function generateResources(
     signer: UserSigner,
@@ -61,6 +102,7 @@ async function main() {
       
       const signer = await loadWallet(walletPath);
       await generateResources(signer);
+      // await stakeTokenWinter(signer);
 
       console.log("Resources has been generated resources successfully");
     } catch (error) {
