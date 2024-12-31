@@ -1,6 +1,7 @@
 [
   "bigIntAdd",
   "bigIntCmp",
+  "bigIntGetCallValue",
   "bigIntMul",
   "bigIntSetInt64",
   "bigIntSign",
@@ -10,10 +11,13 @@
   "getBlockRound",
   "getGasLeft",
   "getNumArguments",
+  "getNumESDTTransfers",
   "mBufferAppend",
   "mBufferAppendBytes",
+  "mBufferCopyByteSlice",
   "mBufferFinish",
   "mBufferFromBigIntUnsigned",
+  "mBufferGetArgument",
   "mBufferGetByteSlice",
   "mBufferGetLength",
   "mBufferNew",
@@ -21,11 +25,14 @@
   "mBufferStorageLoad",
   "mBufferStorageStore",
   "mBufferToBigIntUnsigned",
+  "managedAsyncCall",
   "managedCaller",
   "managedExecuteOnDestContext",
   "managedGetMultiESDTCallValue",
+  "managedGetOriginalTxHash",
   "managedMultiTransferESDTNFTExecute",
   "managedSCAddress",
   "managedSignalError",
-  "signalError"
+  "signalError",
+  "smallIntGetUnsignedArgument"
 ]

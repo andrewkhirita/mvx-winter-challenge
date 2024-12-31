@@ -13,6 +13,7 @@
   "mBufferAppend",
   "mBufferAppendBytes",
   "mBufferCopyByteSlice",
+  "mBufferEq",
   "mBufferFromBigIntUnsigned",
   "mBufferGetArgument",
   "mBufferGetByteSlice",

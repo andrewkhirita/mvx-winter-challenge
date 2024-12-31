@@ -11,6 +11,8 @@ import {
     TokenIdentifierValue,
     AddressValue,
     StringValue,
+    Token,
+    TokenTransfer,
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
@@ -20,8 +22,6 @@ const FUNCTION = "mintCitizen";
 const CHAIN_ID = "D";
 
 const EGLD_FEE = 50000000000000000;
-const TOKEN_NAME = "CITIZEN";
-const TICKER = "CTZ";
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);
 const config = new TransactionsFactoryConfig({ chainID: CHAIN_ID});
@@ -77,7 +77,16 @@ async function mintCitizen(
         contract: Address.fromBech32(SMART_CONTRACT),
         function: FUNCTION,
         gasLimit: BigInt(5000000),
-    });
+        tokenTransfers: [
+          new TokenTransfer({
+              token: new Token({ identifier: "WOOD-e1039b"}),
+              amount: BigInt(10),
+          }),
+          new TokenTransfer({
+              token: new Token({ identifier: "FOOD-c4feb6"}),
+              amount: BigInt(15),
+          })
+      ]    });
     
     const nonce = account.getNonceThenIncrement();
     transaction.nonce = BigInt(nonce.valueOf());
@@ -102,11 +111,8 @@ async function main() {
       
       const signer = await loadWallet(walletPath);
       await mintCitizen(signer);
-
-      const tokenName = `${TOKEN_NAME}`;
-      const tokenTicker = `${TICKER}`;
       
-      // await issueToken(signer, tokenName, tokenTicker);
+      // await issueToken(signer, "CITIZEN", "CITIZEN");
 
       console.log("Resources has been generated resources successfully");
     } catch (error) {

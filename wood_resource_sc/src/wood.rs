@@ -32,13 +32,13 @@ pub trait Wood {
         require!(stake >= 1000u64, "No stake found");
         
         //600
-        const ROUNDS_REQUIRED: u64 = 2;
+        const ROUNDS_REQUIRED: u64 = 20;
         
-        require!(current_round >= last_claim + ROUNDS_REQUIRED, "Not enough rounds passed");
+        // require!(current_round >= last_claim + ROUNDS_REQUIRED, "Not enough rounds passed");
         
         let multiplier = &stake / 1000u64;
-        let rounds_passed = (current_round - last_claim) / ROUNDS_REQUIRED;
-        let amount_to_generate = multiplier * rounds_passed;
+        // let rounds_passed = (current_round - last_claim) / ROUNDS_REQUIRED;
+        let amount_to_generate = multiplier * ROUNDS_REQUIRED;
         
         if amount_to_generate > 0 {
             self.pending_resources(&caller).set(&amount_to_generate);
@@ -65,6 +65,29 @@ pub trait Wood {
             
         self.pending_resources(&caller).clear();
     }
+
+    #[callback]
+    fn wood_token_callback(
+        &self,
+        #[call_result] result: ManagedAsyncCallResult<TokenIdentifier>
+    ) {
+        match result {
+            ManagedAsyncCallResult::Ok(token_id) => {
+                self.token_id().set(&token_id);
+            },
+            ManagedAsyncCallResult::Err(_) => sc_panic!("Token issue failed")
+        }
+    }
+
+    #[payable("EGLD")]
+    #[endpoint(issue)]
+    fn issue_token(&self, name: ManagedBuffer, ticker: ManagedBuffer) {
+        let amount = self.call_value().egld_value();
+        self.token_manager().issue_and_set_all_roles(amount.clone_value(), name, ticker, 0, Some(self.callbacks().wood_token_callback()));
+    }
+
+    #[storage_mapper("ticker")]
+    fn token_manager(&self) -> FungibleTokenMapper<Self::Api>;
 
     #[view(getTokenId)]
     #[storage_mapper("tokenId")]

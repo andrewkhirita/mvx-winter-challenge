@@ -1,50 +1,112 @@
 #![no_std]
 use multiversx_sc::imports::*;
 
+const BLOCKS_IN_HOUR: u64 = 600;
 const STONE_REQUIRED: u64 = 20;
 
 #[multiversx_sc::contract]
-pub trait Ore {
+pub trait Citizen {
     #[init]
-    fn init(&self) {}
+    fn init(&self) {
+    }
 
-    #[payable("STONE")]
-    #[endpoint(convertToOre)]
-    fn convert_to_ore(&self) {
-        let payment = self.call_value().egld_or_single_esdt();
+    #[upgrade]
+    fn upgrade(&self) {}
+
+    #[payable("*")]
+    #[endpoint(mintOre)]
+    fn mint_ore(&self) {
+        let stone_amount = self.get_and_validate_resources();
         let caller = self.blockchain().get_caller();
         
-        require!(payment.amount >= STONE_REQUIRED, "Need 20 STONE");
+        self.burn_resources(stone_amount);
         
-        // Burn STONE tokens
-        self.send().esdt_local_burn(
-            &payment.token_identifier,
-            0,
-            &payment.amount
-        );
-        
-        // Store pending ORE amount
-        let ore_amount = payment.amount / STONE_REQUIRED;
-        self.pending_ore(&caller).set(&ore_amount);
+        let claim_block = self.blockchain().get_block_nonce() + BLOCKS_IN_HOUR;
+        self.pending_claims(&caller).set(&claim_block);
     }
-    
+
     #[endpoint(claimOre)]
     fn claim_ore(&self) {
         let caller = self.blockchain().get_caller();
-        let ore_amount = self.pending_ore(&caller).get();
-        require!(ore_amount > 0, "No ORE to claim");
+        require!(self.is_claim_ready(&caller), "Too early to claim");
         
-        // Send ORE tokens
-        self.send().direct_esdt(
-            &caller,
-            &TokenIdentifier::from_esdt_bytes(b"ORE"),
-            0,
-            &ore_amount
-        );
-        
-        self.pending_ore(&caller).clear();
+        self.mint_and_send_ore(&caller);
+        self.pending_claims(&caller).clear();
     }
 
-    #[storage_mapper("pendingOre")]
-    fn pending_ore(&self, addr: &ManagedAddress) -> SingleValueMapper<BigUint>;
+    #[callback]
+    fn ore_token_callback(
+        &self,
+        #[call_result] result: ManagedAsyncCallResult<TokenIdentifier>
+    ) {
+        match result {
+            ManagedAsyncCallResult::Ok(token_id) => {
+                self.ore_token_id().set(&token_id);
+                self.next_nonce().set(&1u64);
+            },
+            ManagedAsyncCallResult::Err(_) => sc_panic!("Token issue failed")
+        }
+    }
+
+    #[payable("EGLD")]
+    #[endpoint(issue)]
+    fn issue_token(&self, name: ManagedBuffer, ticker: ManagedBuffer) {
+        let amount = self.call_value().egld_value();
+        self.token_manager().issue_and_set_all_roles(amount.clone_value(), name, ticker, 0, Some(self.callbacks().ore_token_callback()));
+    }
+
+    fn get_and_validate_resources(&self) -> BigUint {
+        let mut stone = BigUint::zero();
+
+        for payment in self.call_value().all_esdt_transfers().iter() {
+            match payment.token_identifier.as_managed_buffer().to_boxed_bytes().as_slice() {
+                b"STONE" => stone += &payment.amount,
+                _ => sc_panic!("Invalid token")
+            }
+        }
+
+        require!(stone >= STONE_REQUIRED, "Not enough STONE");
+        
+        stone
+    }
+
+    fn burn_resources(&self, stone: BigUint) {
+        self.send().esdt_local_burn(&TokenIdentifier::from_esdt_bytes(b"STONE"), 0, &stone);
+    }
+
+    fn is_claim_ready(&self, caller: &ManagedAddress) -> bool {
+        let claim_block = self.pending_claims(caller).get();
+        self.blockchain().get_block_nonce() >= claim_block
+    }
+
+    fn mint_and_send_ore(&self, to: &ManagedAddress) {
+        let nonce: u64 = self.next_nonce().get();
+        
+        self.send().esdt_local_mint(
+            &self.ore_token_id().get(),
+            0,
+            &BigUint::from(1u64)
+        );
+
+        self.send().direct_esdt(
+            to,
+            &self.ore_token_id().get(),
+            nonce,
+            &BigUint::from(1u64)
+        );
+
+        self.next_nonce().update(|val| *val += 1);
+    }
+
+    #[storage_mapper("oreTokenId")]
+    fn ore_token_id(&self) -> SingleValueMapper<TokenIdentifier>;
+
+    #[storage_mapper("ticker")]
+    fn token_manager(&self) -> FungibleTokenMapper<Self::Api>;
+
+    #[storage_mapper("nextNonce")]
+    fn next_nonce(&self) -> SingleValueMapper<u64>;
+
+    #[storage_mapper("pendingClaims")]
+    fn pending_claims(&self, addr: &ManagedAddress) -> SingleValueMapper<u64>;
 }

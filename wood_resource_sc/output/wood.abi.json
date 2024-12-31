@@ -48,6 +48,24 @@
             "outputs": []
         },
         {
+            "name": "issue",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "EGLD"
+            ],
+            "inputs": [
+                {
+                    "name": "name",
+                    "type": "bytes"
+                },
+                {
+                    "name": "ticker",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
             "name": "getTokenId",
             "mutability": "readonly",
             "inputs": [],
@@ -59,6 +77,6 @@
         }
     ],
     "esdtAttributes": [],
-    "hasCallback": false,
+    "hasCallback": true,
     "types": {}
 }

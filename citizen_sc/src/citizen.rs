@@ -59,21 +59,23 @@ pub trait Citizen {
     fn get_and_validate_resources(&self) -> (BigUint, BigUint) {
         let mut wood = BigUint::zero();
         let mut food = BigUint::zero();
-
+        
         for payment in self.call_value().all_esdt_transfers().iter() {
-            match payment.token_identifier.as_managed_buffer().to_boxed_bytes().as_slice() {
-                b"WOOD" => wood += &payment.amount,
-                b"FOOD" => food += &payment.amount,
-                _ => sc_panic!("Invalid token")
+            let token_buffer = payment.token_identifier.as_managed_buffer();
+            if token_buffer.copy_slice(0, 5).unwrap() == ManagedBuffer::from(b"WOOD-") {
+                wood += &payment.amount;
+            } else if token_buffer.copy_slice(0, 5).unwrap() == ManagedBuffer::from(b"FOOD-") {
+                food += &payment.amount;
+            } else {
+                sc_panic!("Invalid token");
             }
         }
-
+        
         require!(wood >= WOOD_REQUIRED, "Not enough WOOD");
         require!(food >= FOOD_REQUIRED, "Not enough FOOD");
-        
         (wood, food)
-    }
-
+     }
+    
     fn burn_resources(&self, wood: BigUint, food: BigUint) {
         self.send().esdt_local_burn(&TokenIdentifier::from_esdt_bytes(b"WOOD"), 0, &wood);
         self.send().esdt_local_burn(&TokenIdentifier::from_esdt_bytes(b"FOOD"), 0, &food);
