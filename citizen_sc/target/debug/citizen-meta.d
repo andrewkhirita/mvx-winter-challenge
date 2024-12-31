@@ -1,0 +1,1 @@
+/Users/andrewkhirita/Desktop/mvx-winter-challenge/citizen_sc/target/debug/citizen-meta: /Users/andrewkhirita/Desktop/mvx-winter-challenge/citizen_sc/meta/src/main.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/citizen_sc/src/citizen.rs

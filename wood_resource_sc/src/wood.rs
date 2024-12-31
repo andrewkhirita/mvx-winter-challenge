@@ -31,7 +31,8 @@ pub trait Wood {
         
         require!(stake >= 1000u64, "No stake found");
         
-        const ROUNDS_REQUIRED: u64 = 600;
+        //600
+        const ROUNDS_REQUIRED: u64 = 2;
         
         require!(current_round >= last_claim + ROUNDS_REQUIRED, "Not enough rounds passed");
         
