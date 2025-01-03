@@ -1,0 +1,1 @@
+/Users/andrewkhirita/Desktop/mvx-winter-challenge/ore_sc/target/debug/ore-meta: /Users/andrewkhirita/Desktop/mvx-winter-challenge/ore_sc/meta/src/main.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/ore_sc/src/ore.rs

@@ -1,0 +1,66 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.85.0-nightly",
+            "commitHash": "6d9f6ae36ae1299d6126ba40c15191f7aa3b79d8",
+            "commitDate": "2024-12-16",
+            "channel": "Nightly",
+            "short": "rustc 1.85.0-nightly (6d9f6ae36 2024-12-16)"
+        },
+        "contractCrate": {
+            "name": "ore",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "multiversx-sc",
+            "version": "0.54.6"
+        }
+    },
+    "name": "Ore",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "upgradeConstructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "mintOre",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "claimOre",
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "issue",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "EGLD"
+            ],
+            "inputs": [
+                {
+                    "name": "name",
+                    "type": "bytes"
+                },
+                {
+                    "name": "ticker",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        }
+    ],
+    "esdtAttributes": [],
+    "hasCallback": true,
+    "types": {}
+}

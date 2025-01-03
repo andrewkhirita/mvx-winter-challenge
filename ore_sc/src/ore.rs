@@ -1,11 +1,10 @@
 #![no_std]
 use multiversx_sc::imports::*;
 
-const BLOCKS_IN_HOUR: u64 = 600;
 const STONE_REQUIRED: u64 = 20;
 
 #[multiversx_sc::contract]
-pub trait Citizen {
+pub trait Ore {
     #[init]
     fn init(&self) {
     }
@@ -20,17 +19,23 @@ pub trait Citizen {
         let caller = self.blockchain().get_caller();
         
         self.burn_resources(stone_amount);
-        
-        let claim_block = self.blockchain().get_block_nonce() + BLOCKS_IN_HOUR;
+
+        let claim_block = self.blockchain().get_block_nonce() + 1u64; 
         self.pending_claims(&caller).set(&claim_block);
+        
     }
 
     #[endpoint(claimOre)]
     fn claim_ore(&self) {
         let caller = self.blockchain().get_caller();
-        require!(self.is_claim_ready(&caller), "Too early to claim");
         
-        self.mint_and_send_ore(&caller);
+        require!(self.pending_claims(&caller).is_empty() == false, "No pending claim");
+        
+        let claim_block = self.pending_claims(&caller).get();
+        require!(self.blockchain().get_block_nonce() >= claim_block, "Too early to claim");
+        
+        self.mint_helper(&caller);
+        
         self.pending_claims(&caller).clear();
     }
 
@@ -57,45 +62,63 @@ pub trait Citizen {
 
     fn get_and_validate_resources(&self) -> BigUint {
         let mut stone = BigUint::zero();
-
+        
         for payment in self.call_value().all_esdt_transfers().iter() {
-            match payment.token_identifier.as_managed_buffer().to_boxed_bytes().as_slice() {
-                b"STONE" => stone += &payment.amount,
-                _ => sc_panic!("Invalid token")
+            let token_buffer = payment.token_identifier.as_managed_buffer();
+            if token_buffer.len() >= 6 {
+                let prefix = token_buffer.copy_slice(0, 6).unwrap();
+                if prefix == ManagedBuffer::from(b"STONE-") {
+                    stone += &payment.amount;
+                } else {
+                    sc_panic!("Invalid token");
+                }
+            } else {
+                sc_panic!("Invalid token identifier length");
             }
         }
-
-        require!(stone >= STONE_REQUIRED, "Not enough STONE");
         
+        require!(stone >= STONE_REQUIRED, "Not enough STONE");
         stone
     }
-
+    
     fn burn_resources(&self, stone: BigUint) {
-        self.send().esdt_local_burn(&TokenIdentifier::from_esdt_bytes(b"STONE"), 0, &stone);
+        let payments = self.call_value().all_esdt_transfers();
+        let mut stone_token_id = None;
+        
+        for payment in payments.iter() {
+            let token_buffer = payment.token_identifier.as_managed_buffer();
+            if token_buffer.len() >= 6 {
+                let prefix = token_buffer.copy_slice(0, 6).unwrap();
+                if prefix == ManagedBuffer::from(b"STONE-") {
+                    stone_token_id = Some(payment.token_identifier.clone());
+                }
+            }
+        }
+        
+        match stone_token_id {
+            Some(stone_id) => {
+                self.send().esdt_local_burn(&stone_id, 0, &stone);
+            },
+            None => sc_panic!("Stone token not found in payments")
+        }
     }
 
-    fn is_claim_ready(&self, caller: &ManagedAddress) -> bool {
-        let claim_block = self.pending_claims(caller).get();
-        self.blockchain().get_block_nonce() >= claim_block
-    }
-
-    fn mint_and_send_ore(&self, to: &ManagedAddress) {
-        let nonce: u64 = self.next_nonce().get();
+    fn mint_helper(&self, to: &ManagedAddress) {
+        let token_id = self.ore_token_id().get();
+        let nonce = 0; 
         
         self.send().esdt_local_mint(
-            &self.ore_token_id().get(),
-            0,
-            &BigUint::from(1u64)
+            &token_id,
+            nonce,
+            &BigUint::from(1000u64)
         );
-
+    
         self.send().direct_esdt(
             to,
-            &self.ore_token_id().get(),
+            &token_id,
             nonce,
-            &BigUint::from(1u64)
+            &BigUint::from(1000u64)
         );
-
-        self.next_nonce().update(|val| *val += 1);
     }
 
     #[storage_mapper("oreTokenId")]
