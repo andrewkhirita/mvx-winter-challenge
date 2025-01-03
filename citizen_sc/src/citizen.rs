@@ -5,6 +5,9 @@ const BLOCKS_IN_HOUR: u64 = 600;
 const WOOD_REQUIRED: u64 = 10;
 const FOOD_REQUIRED: u64 = 15;
 
+const GOLD_REQUIRED: u64 = 5;
+const ORE_REQUIRED: u64 = 5;
+
 #[multiversx_sc::contract]
 pub trait Citizen {
     #[init]
@@ -132,6 +135,95 @@ pub trait Citizen {
         );
 
         self.next_nonce().update(|val| *val += 1);
+    }
+
+    #[payable("*")]
+    #[endpoint(upgradeCitizen)]
+    fn upgrade_citizen(
+        &self
+    ) {
+
+        let payments = self.call_value().all_esdt_transfers();
+        require!(payments.len() == 3, "Expected 3 tokens");
+
+        let citizen_payment = payments.get(0);
+        require!(
+            citizen_payment.token_identifier == self.citizen_token_id().get(),
+            "Invalid Citizen NFT"
+        );
+        
+        let (gold_amount, ore_amount) = self.get_and_validate_upgrade_resources();
+        let caller = self.blockchain().get_caller();
+        
+        self.burn_upgrade_resources(gold_amount, ore_amount);
+        
+        self.upgrade_nft_to_soldier(&caller, citizen_payment.token_nonce);
+    }
+
+    fn get_and_validate_upgrade_resources(&self) -> (BigUint, BigUint) {
+        let mut gold = BigUint::zero();
+        let mut ore = BigUint::zero();
+        
+        for payment in self.call_value().all_esdt_transfers().iter() {
+            let token_buffer = payment.token_identifier.as_managed_buffer();
+            if token_buffer.len() >= 5 {
+                let prefix_gold = token_buffer.copy_slice(0, 5).unwrap();
+                let prefix_ore = token_buffer.copy_slice(0, 4).unwrap();
+                if prefix_gold == ManagedBuffer::from(b"GOLD-") {
+                    gold += &payment.amount;
+                } else if prefix_ore == ManagedBuffer::from(b"ORE-") {
+                    ore += &payment.amount;
+                }
+            }
+        }
+        
+        require!(gold >= GOLD_REQUIRED, "Not enough GOLD");
+        require!(ore >= ORE_REQUIRED, "Not enough ORE");
+        (gold, ore)
+    }
+    
+    fn burn_upgrade_resources(&self, gold: BigUint, ore: BigUint) {
+        let payments = self.call_value().all_esdt_transfers();
+        let mut gold_token_id = None;
+        let mut ore_token_id = None;
+        
+        for payment in payments.iter() {
+            let token_buffer = payment.token_identifier.as_managed_buffer();
+            if token_buffer.len() >= 5 {
+                let prefix_gold = token_buffer.copy_slice(0, 5).unwrap();
+                let prefix_ore = token_buffer.copy_slice(0, 4).unwrap();
+                if prefix_gold == ManagedBuffer::from(b"GOLD-") {
+                    gold_token_id = Some(payment.token_identifier.clone());
+                } else if prefix_ore == ManagedBuffer::from(b"ORE-") {
+                    ore_token_id = Some(payment.token_identifier.clone());
+                }
+            }
+        }
+        
+        if let Some(gold_id) = gold_token_id {
+            self.send().esdt_local_burn(&gold_id, 0, &gold);
+        }
+        if let Some(ore_id) = ore_token_id {
+            self.send().esdt_local_burn(&ore_id, 0, &ore);
+        }
+    }
+
+    fn upgrade_nft_to_soldier(&self, to: &ManagedAddress, citizen_nonce: u64) {
+        let mut attributes = ManagedBuffer::new();
+        attributes.append(&ManagedBuffer::from(b"rank: soldier"));
+        
+        self.send().nft_update_attributes(
+            &self.citizen_token_id().get(),
+            citizen_nonce,
+            &attributes,
+        );
+
+        self.send().direct_esdt(
+            to,
+            &self.citizen_token_id().get(),
+            citizen_nonce,
+            &BigUint::from(1u64)
+        );
     }
 
     #[storage_mapper("citizenTokenId")]

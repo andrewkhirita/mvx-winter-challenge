@@ -70,9 +70,9 @@ async function main() {
       const signer = await loadWallet(walletPath);
       await claimResources(signer);
 
-      console.log("Resources has been generated resources successfully");
+      console.log("Resources has been claimed successfully");
     } catch (error) {
-      console.error("Error during generated resources:", error);
+      console.error("Error during claimed resources:", error);
     }
 }
 

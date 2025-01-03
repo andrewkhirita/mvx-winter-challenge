@@ -58,6 +58,15 @@
                 }
             ],
             "outputs": []
+        },
+        {
+            "name": "upgradeCitizen",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [],
+            "outputs": []
         }
     ],
     "esdtAttributes": [],
