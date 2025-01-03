@@ -142,7 +142,6 @@ pub trait Citizen {
     fn upgrade_citizen(
         &self
     ) {
-
         let payments = self.call_value().all_esdt_transfers();
         require!(payments.len() == 3, "Expected 3 tokens");
 
