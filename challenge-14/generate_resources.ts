@@ -147,8 +147,8 @@ async function main() {
       
       const signer = await loadWallet(walletPath);
       // await issueToken(signer, "FOOD", "FOOD");
-      await generateResources(signer);
       // await stakeTokenWinter(signer);
+      await generateResources(signer);
 
       console.log("Resources has been generated resources successfully");
     } catch (error) {

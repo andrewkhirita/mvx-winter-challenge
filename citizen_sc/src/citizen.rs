@@ -62,23 +62,48 @@ pub trait Citizen {
         
         for payment in self.call_value().all_esdt_transfers().iter() {
             let token_buffer = payment.token_identifier.as_managed_buffer();
-            if token_buffer.copy_slice(0, 5).unwrap() == ManagedBuffer::from(b"WOOD-") {
-                wood += &payment.amount;
-            } else if token_buffer.copy_slice(0, 5).unwrap() == ManagedBuffer::from(b"FOOD-") {
-                food += &payment.amount;
+            if token_buffer.len() >= 5 {
+                let prefix = token_buffer.copy_slice(0, 5).unwrap();
+                if prefix == ManagedBuffer::from(b"WOOD-") {
+                    wood += &payment.amount;
+                } else if prefix == ManagedBuffer::from(b"FOOD-") {
+                    food += &payment.amount;
+                } else {
+                    sc_panic!("Invalid token");
+                }
             } else {
-                sc_panic!("Invalid token");
+                sc_panic!("Invalid token identifier length");
             }
         }
         
         require!(wood >= WOOD_REQUIRED, "Not enough WOOD");
         require!(food >= FOOD_REQUIRED, "Not enough FOOD");
         (wood, food)
-     }
+    }
     
     fn burn_resources(&self, wood: BigUint, food: BigUint) {
-        self.send().esdt_local_burn(&TokenIdentifier::from_esdt_bytes(b"WOOD"), 0, &wood);
-        self.send().esdt_local_burn(&TokenIdentifier::from_esdt_bytes(b"FOOD"), 0, &food);
+        let payments = self.call_value().all_esdt_transfers();
+        let mut wood_token_id = None;
+        let mut food_token_id = None;
+        
+        for payment in payments.iter() {
+            let token_buffer = payment.token_identifier.as_managed_buffer();
+            if token_buffer.len() >= 5 {
+                let prefix = token_buffer.copy_slice(0, 5).unwrap();
+                if prefix == ManagedBuffer::from(b"WOOD-") {
+                    wood_token_id = Some(payment.token_identifier.clone());
+                } else if prefix == ManagedBuffer::from(b"FOOD-") {
+                    food_token_id = Some(payment.token_identifier.clone());
+                }
+            }
+        }
+        
+        if let Some(wood_id) = wood_token_id {
+            self.send().esdt_local_burn(&wood_id, 0, &wood);
+        }
+        if let Some(food_id) = food_token_id {
+            self.send().esdt_local_burn(&food_id, 0, &food);
+        }
     }
 
     fn is_claim_ready(&self, caller: &ManagedAddress) -> bool {
