@@ -221,14 +221,14 @@ pub trait Citizen {
 
     fn upgrade_nft_to_soldier(&self, to: &ManagedAddress, citizen_nonce: u64) {
         let mut attributes = ManagedBuffer::new();
-        attributes.append(&ManagedBuffer::from(b"rank: soldier"));
+        attributes.append(&ManagedBuffer::from(b"rank: soldier\ndefense: 0\nattack: 0"));
         
         self.send().nft_update_attributes(
             &self.citizen_token_id().get(),
             citizen_nonce,
             &attributes,
         );
-
+    
         self.send().direct_esdt(
             to,
             &self.citizen_token_id().get(),
@@ -327,7 +327,6 @@ pub trait Citizen {
             "Character must be a soldier"
         );
     
-        // Verify sword NFT
         let sword_token_id = sword_payment.token_identifier.as_managed_buffer();
         require!(
             sword_token_id.copy_slice(0, 4).unwrap() == ManagedBuffer::from(b"TOOL"),
@@ -342,24 +341,24 @@ pub trait Citizen {
             citizen_nonce,
         );
     
-        // Construim noile atribute
-        let mut new_attributes = ManagedBuffer::new();
-        new_attributes.append(&ManagedBuffer::from(b"rank: soldier\ndefense: 1"));
-    
-        // Verificăm dacă deja există attack în atributele existente
         let old_attributes = token_data.attributes;
-        if old_attributes.len() > 0 {
-            let attack_attribute = ManagedBuffer::from(b"\nattack: 1");
-            if old_attributes == ManagedBuffer::from(b"rank: soldier\nattack: 1") {
-                new_attributes.append(&attack_attribute);
-            }
+        if old_attributes == ManagedBuffer::from(b"rank: soldier\ndefense: 0\nattack: 0") {
+            let mut new_attributes = ManagedBuffer::new();
+            new_attributes.append(&ManagedBuffer::from(b"rank: soldier\ndefense: 1\nattack: 0"));
+            self.send().nft_update_attributes(
+                &self.citizen_token_id().get(),
+                citizen_nonce,
+                &new_attributes,
+            );
+        } else if old_attributes == ManagedBuffer::from(b"rank: soldier\ndefense: 1\nattack: 0") {
+            let mut new_attributes = ManagedBuffer::new();
+            new_attributes.append(&ManagedBuffer::from(b"rank: soldier\ndefense: 2\nattack: 0"));
+            self.send().nft_update_attributes(
+                &self.citizen_token_id().get(),
+                citizen_nonce,
+                &new_attributes,
+            );
         }
-    
-        self.send().nft_update_attributes(
-            &self.citizen_token_id().get(),
-            citizen_nonce,
-            &new_attributes,
-        );
     
         self.send().direct_esdt(
             to,
@@ -376,24 +375,24 @@ pub trait Citizen {
             citizen_nonce,
         );
     
-        // Construim noile atribute
-        let mut new_attributes = ManagedBuffer::new();
-        new_attributes.append(&ManagedBuffer::from(b"rank: soldier\nattack: 1"));
-    
-        // Verificăm dacă deja există defense în atributele existente
         let old_attributes = token_data.attributes;
-        if old_attributes.len() > 0 {
-            let defense_attribute = ManagedBuffer::from(b"\ndefense: 1");
-            if old_attributes == ManagedBuffer::from(b"rank: soldier\ndefense: 1") {
-                new_attributes.append(&defense_attribute);
-            }
+        if old_attributes == ManagedBuffer::from(b"rank: soldier\ndefense: 0\nattack: 0") {
+            let mut new_attributes = ManagedBuffer::new();
+            new_attributes.append(&ManagedBuffer::from(b"rank: soldier\ndefense: 0\nattack: 1"));
+            self.send().nft_update_attributes(
+                &self.citizen_token_id().get(),
+                citizen_nonce,
+                &new_attributes,
+            );
+        } else if old_attributes == ManagedBuffer::from(b"rank: soldier\ndefense: 0\nattack: 1") {
+            let mut new_attributes = ManagedBuffer::new();
+            new_attributes.append(&ManagedBuffer::from(b"rank: soldier\ndefense: 0\nattack: 2"));
+            self.send().nft_update_attributes(
+                &self.citizen_token_id().get(),
+                citizen_nonce,
+                &new_attributes,
+            );
         }
-    
-        self.send().nft_update_attributes(
-            &self.citizen_token_id().get(),
-            citizen_nonce,
-            &new_attributes,
-        );
     
         self.send().direct_esdt(
             to,

@@ -45,7 +45,7 @@ async function upgradeCitizen(
       gasLimit: BigInt(5000000),
       tokenTransfers: [
         new TokenTransfer({
-          token: new Token({identifier: "CITIZEN-253783", nonce: BigInt(3)}), amount: BigInt(1),
+          token: new Token({identifier: "CITIZEN-253783", nonce: BigInt(5)}), amount: BigInt(1),
       }),
         new TokenTransfer({
             token: new Token({ identifier: "GOLD-ec9de5"}),
