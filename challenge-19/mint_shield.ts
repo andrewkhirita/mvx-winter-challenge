@@ -141,7 +141,7 @@ async function main() {
       
       const signer = await loadWallet(walletPath);
     //   await issueToken(signer, "TOOL", "TOOL");
-    //   await mintShield(signer);
+      // await mintShield(signer);
       await claimShield(signer);
       
       console.log("Proccess to mint shield was completed!");

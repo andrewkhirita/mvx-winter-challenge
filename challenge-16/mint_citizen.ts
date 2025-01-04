@@ -146,7 +146,7 @@ async function main() {
       const signer = await loadWallet(walletPath);
       // await issueToken(signer, "CITIZEN", "CITIZEN");
       // await mintCitizen(signer);
-      // await claimCitizen(signer);
+      await claimCitizen(signer);
       
       console.log("Proccess to mint citizen was completed!");
     } catch (error) {

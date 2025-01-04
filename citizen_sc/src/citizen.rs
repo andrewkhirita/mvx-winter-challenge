@@ -1,12 +1,24 @@
 #![no_std]
-use multiversx_sc::imports::*;
+multiversx_sc::imports!();
+multiversx_sc::derive_imports!();
 
-const BLOCKS_IN_HOUR: u64 = 600;
+// const BLOCKS_IN_HOUR: u64 = 600;
+const BLOCKS_IN_HOUR: u64 = 1;
+
 const WOOD_REQUIRED: u64 = 10;
 const FOOD_REQUIRED: u64 = 15;
 
 const GOLD_REQUIRED: u64 = 5;
 const ORE_REQUIRED: u64 = 5;
+
+
+#[type_abi]
+#[derive(TopEncode, TopDecode, PartialEq, Debug)]
+pub struct CharacterAttributes<M: ManagedTypeApi> {
+    rank: ManagedBuffer<M>,
+    defense: u8,
+    attack: u8,
+}
 
 #[multiversx_sc::contract]
 pub trait Citizen {
@@ -217,6 +229,172 @@ pub trait Citizen {
             &attributes,
         );
 
+        self.send().direct_esdt(
+            to,
+            &self.citizen_token_id().get(),
+            citizen_nonce,
+            &BigUint::from(1u64)
+        );
+    }
+
+    #[payable("*")]
+    #[endpoint(equipShield)]
+    fn equip_shield(&self) {
+        let payments = self.call_value().all_esdt_transfers();
+        require!(payments.len() == 2, "Expected 2 tokens");
+
+        let citizen_payment = payments.get(0);
+        let shield_payment = payments.get(1);
+        
+        require!(
+            citizen_payment.token_identifier == self.citizen_token_id().get(),
+            "Invalid Citizen NFT"
+        );
+
+        self.validate_soldier_and_shield(&citizen_payment, &shield_payment);
+        
+        let caller = self.blockchain().get_caller();
+        
+        self.update_character_with_shield(&caller, citizen_payment.token_nonce);
+    }
+
+    #[payable("*")]
+    #[endpoint(equipSword)]
+    fn equip_sword(&self) {
+        let payments = self.call_value().all_esdt_transfers();
+        require!(payments.len() == 2, "Expected 2 tokens");
+
+        let citizen_payment = payments.get(0);
+        let sword_payment = payments.get(1);
+        
+        require!(
+            citizen_payment.token_identifier == self.citizen_token_id().get(),
+            "Invalid Citizen NFT"
+        );
+
+        self.validate_soldier_and_sword(&citizen_payment, &sword_payment);
+        
+        let caller = self.blockchain().get_caller();
+        self.update_character_with_sword(&caller, citizen_payment.token_nonce);
+    }
+
+    fn validate_soldier_and_shield(
+        &self,
+        citizen_payment: &EsdtTokenPayment<Self::Api>,
+        shield_payment: &EsdtTokenPayment<Self::Api>
+    ) {
+        let token_data = self.blockchain().get_esdt_token_data(
+            &self.blockchain().get_sc_address(),
+            &citizen_payment.token_identifier,
+            citizen_payment.token_nonce,
+        );
+    
+        let soldier_prefix = ManagedBuffer::from(b"rank: soldier");
+        let prefix_length = soldier_prefix.len();
+        let attributes = token_data.attributes.clone();
+        
+        require!(
+            attributes.len() >= prefix_length && 
+            attributes.copy_slice(0, prefix_length).unwrap() == soldier_prefix,
+            "Character must be a soldier"
+        );
+    
+        let shield_token_id = shield_payment.token_identifier.as_managed_buffer();
+        require!(
+            shield_token_id.copy_slice(0, 4).unwrap() == ManagedBuffer::from(b"TOOL"),
+            "Invalid Shield NFT"
+        );
+    }
+
+    fn validate_soldier_and_sword(
+        &self,
+        citizen_payment: &EsdtTokenPayment<Self::Api>,
+        sword_payment: &EsdtTokenPayment<Self::Api>
+    ) {
+        let token_data = self.blockchain().get_esdt_token_data(
+            &self.blockchain().get_sc_address(),
+            &citizen_payment.token_identifier,
+            citizen_payment.token_nonce,
+        );
+    
+        let soldier_prefix = ManagedBuffer::from(b"rank: soldier");
+        let prefix_length = soldier_prefix.len();
+        let attributes = token_data.attributes.clone();
+        
+        require!(
+            attributes.len() >= prefix_length && 
+            attributes.copy_slice(0, prefix_length).unwrap() == soldier_prefix,
+            "Character must be a soldier"
+        );
+    
+        // Verify sword NFT
+        let sword_token_id = sword_payment.token_identifier.as_managed_buffer();
+        require!(
+            sword_token_id.copy_slice(0, 4).unwrap() == ManagedBuffer::from(b"TOOL"),
+            "Invalid Shield NFT"
+        );
+    }
+
+    fn update_character_with_shield(&self, to: &ManagedAddress, citizen_nonce: u64) {
+        let token_data = self.blockchain().get_esdt_token_data(
+            &self.blockchain().get_sc_address(),
+            &self.citizen_token_id().get(),
+            citizen_nonce,
+        );
+    
+        // Construim noile atribute
+        let mut new_attributes = ManagedBuffer::new();
+        new_attributes.append(&ManagedBuffer::from(b"rank: soldier\ndefense: 1"));
+    
+        // Verificăm dacă deja există attack în atributele existente
+        let old_attributes = token_data.attributes;
+        if old_attributes.len() > 0 {
+            let attack_attribute = ManagedBuffer::from(b"\nattack: 1");
+            if old_attributes == ManagedBuffer::from(b"rank: soldier\nattack: 1") {
+                new_attributes.append(&attack_attribute);
+            }
+        }
+    
+        self.send().nft_update_attributes(
+            &self.citizen_token_id().get(),
+            citizen_nonce,
+            &new_attributes,
+        );
+    
+        self.send().direct_esdt(
+            to,
+            &self.citizen_token_id().get(),
+            citizen_nonce,
+            &BigUint::from(1u64)
+        );
+    }
+    
+    fn update_character_with_sword(&self, to: &ManagedAddress, citizen_nonce: u64) {
+        let token_data = self.blockchain().get_esdt_token_data(
+            &self.blockchain().get_sc_address(),
+            &self.citizen_token_id().get(),
+            citizen_nonce,
+        );
+    
+        // Construim noile atribute
+        let mut new_attributes = ManagedBuffer::new();
+        new_attributes.append(&ManagedBuffer::from(b"rank: soldier\nattack: 1"));
+    
+        // Verificăm dacă deja există defense în atributele existente
+        let old_attributes = token_data.attributes;
+        if old_attributes.len() > 0 {
+            let defense_attribute = ManagedBuffer::from(b"\ndefense: 1");
+            if old_attributes == ManagedBuffer::from(b"rank: soldier\ndefense: 1") {
+                new_attributes.append(&defense_attribute);
+            }
+        }
+    
+        self.send().nft_update_attributes(
+            &self.citizen_token_id().get(),
+            citizen_nonce,
+            &new_attributes,
+        );
+    
         self.send().direct_esdt(
             to,
             &self.citizen_token_id().get(),

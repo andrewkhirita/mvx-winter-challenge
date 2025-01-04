@@ -67,6 +67,24 @@
             ],
             "inputs": [],
             "outputs": []
+        },
+        {
+            "name": "equipShield",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "equipSword",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [],
+            "outputs": []
         }
     ],
     "esdtAttributes": [],
