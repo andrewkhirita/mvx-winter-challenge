@@ -1,0 +1,124 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.85.0-nightly",
+            "commitHash": "6d9f6ae36ae1299d6126ba40c15191f7aa3b79d8",
+            "commitDate": "2024-12-16",
+            "channel": "Nightly",
+            "short": "rustc 1.85.0-nightly (6d9f6ae36 2024-12-16)"
+        },
+        "contractCrate": {
+            "name": "arena",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "multiversx-sc",
+            "version": "0.54.6"
+        }
+    },
+    "name": "Arena",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "upgradeConstructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "createGame",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "joinGame",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "game_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getGame",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "game_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "Option<ArenaGame>"
+                }
+            ]
+        },
+        {
+            "name": "getNextGameId",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        }
+    ],
+    "esdtAttributes": [],
+    "hasCallback": false,
+    "types": {
+        "ArenaGame": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "initiator",
+                    "type": "Address"
+                },
+                {
+                    "name": "initiator_soldier",
+                    "type": "EsdtTokenPayment"
+                },
+                {
+                    "name": "entrance_fee",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "competitor",
+                    "type": "Option<Address>"
+                },
+                {
+                    "name": "competitor_soldier",
+                    "type": "Option<EsdtTokenPayment>"
+                }
+            ]
+        },
+        "EsdtTokenPayment": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "token_nonce",
+                    "type": "u64"
+                },
+                {
+                    "name": "amount",
+                    "type": "BigUint"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,1 @@
+/Users/andrewkhirita/Desktop/mvx-winter-challenge/arena_sc/target/debug/arena-meta: /Users/andrewkhirita/Desktop/mvx-winter-challenge/arena_sc/meta/src/main.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/arena_sc/src/arena.rs

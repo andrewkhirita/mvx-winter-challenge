@@ -44,10 +44,10 @@ async function equipSword(
         gasLimit: BigInt(5000000),
         tokenTransfers: [
           new TokenTransfer({
-            token: new Token({identifier: "CITIZEN-253783", nonce: BigInt(5)}), amount: BigInt(1),
+            token: new Token({identifier: "CITIZEN-253783", nonce: BigInt(9)}), amount: BigInt(1),
         }),
         new TokenTransfer({
-            token: new Token({identifier: "TOOL-bfecee", nonce: BigInt(17)}), amount: BigInt(1),
+            token: new Token({identifier: "TOOL-bfecee", nonce: BigInt(21)}), amount: BigInt(1),
         }),
       ]    
     });
