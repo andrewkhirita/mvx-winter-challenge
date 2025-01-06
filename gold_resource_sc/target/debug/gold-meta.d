@@ -1,1 +1,0 @@
-/Users/andrewkhirita/Desktop/mvx-winter-challenge/gold_resource_sc/target/debug/gold-meta: /Users/andrewkhirita/Desktop/mvx-winter-challenge/gold_resource_sc/meta/src/main.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/gold_resource_sc/src/gold.rs

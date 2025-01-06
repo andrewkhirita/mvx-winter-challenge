@@ -8,13 +8,8 @@ import {
     TransactionComputer,
     Account,
     SmartContractTransactionsFactory,
-    TokenIdentifierValue,
-    AddressValue,
-    StringValue,
     Token,
     TokenTransfer,
-    U64Value,
-    BigIntValue,
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";

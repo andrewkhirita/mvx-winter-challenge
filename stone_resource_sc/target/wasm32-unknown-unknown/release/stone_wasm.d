@@ -1,1 +1,0 @@
-/Users/andrewkhirita/Desktop/mvx-winter-challenge/stone_resource_sc/target/wasm32-unknown-unknown/release/stone_wasm.wasm: /Users/andrewkhirita/Desktop/mvx-winter-challenge/stone_resource_sc/src/stone.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/stone_resource_sc/wasm/src/lib.rs

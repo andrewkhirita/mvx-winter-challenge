@@ -1,1 +1,0 @@
-/Users/andrewkhirita/Desktop/mvx-winter-challenge/wood_resource_sc/target/wasm32-unknown-unknown/release/wood_wasm.wasm: /Users/andrewkhirita/Desktop/mvx-winter-challenge/wood_resource_sc/src/wood.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/wood_resource_sc/wasm/src/lib.rs
