@@ -1,1 +1,0 @@
-/Users/andrewkhirita/Desktop/mvx-winter-challenge/arena_sc/target/wasm32-unknown-unknown/release/arena_wasm.wasm: /Users/andrewkhirita/Desktop/mvx-winter-challenge/arena_sc/src/arena.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/arena_sc/wasm/src/lib.rs

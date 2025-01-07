@@ -1,2 +1,0 @@
-&multiversx_sc::types::EsdtTokenPayment<<Self as multiversx_sc::contract_base::ContractBase>::Api>
-multiversx_sc::types::EsdtTokenPayment<<Self as multiversx_sc::contract_base::ContractBase>::Api>
