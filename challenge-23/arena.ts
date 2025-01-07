@@ -21,6 +21,9 @@ const URL = "https://devnet-api.multiversx.com";
 const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgqhwdtf39jdex90jvq8uw9f6e0xrs8udn46dkqj7dtg9";
 const FUNCTION_TO_CREATE_GAME = "createGame";
 const FUNCTION_TO_JOIN_GAME = "joinGame";
+const ENTRANCE_FEE = "50000000000000000";
+
+const GAME_ID = 11;
 
 const CHAIN_ID = "D";
 
@@ -45,10 +48,10 @@ async function createGame(
         gasLimit: BigInt(5000000),
         tokenTransfers: [
           new TokenTransfer({
-            token: new Token({identifier: "CITIZEN-253783", nonce: BigInt(8)}), amount: BigInt(1),
+            token: new Token({identifier: "CITIZEN-253783", nonce: BigInt(16)}), amount: BigInt(1),
         }),
       ],
-      nativeTransferAmount: BigInt(5000000)
+      nativeTransferAmount: BigInt(ENTRANCE_FEE)
     });
     
     const nonce = account.getNonceThenIncrement();
@@ -73,7 +76,7 @@ async function createGame(
     const accountOnNetwork = await apiNetworkProvider.getAccount(address);
     account.update(accountOnNetwork);
 
-    let args = [new U64Value(1)];
+    let args = [new U64Value(GAME_ID)];
   
     const transaction = factory.createTransactionForExecute({
         sender: address,
@@ -82,10 +85,10 @@ async function createGame(
         gasLimit: BigInt(5000000),
         tokenTransfers: [
             new TokenTransfer({
-              token: new Token({identifier: "CITIZEN-253783", nonce: BigInt(9)}), amount: BigInt(1),
+              token: new Token({identifier: "CITIZEN-253783", nonce: BigInt(17)}), amount: BigInt(1),
           }),
         ],
-      nativeTransferAmount: BigInt(5000000),
+      nativeTransferAmount: BigInt(ENTRANCE_FEE),
       arguments: args,
     });
     
@@ -112,12 +115,14 @@ async function main() {
       const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${0}_${1}.json`);
       
       const signer = await loadWallet(walletPath);
-    //   await createGame(signer);
+      // await createGame(signer);
       await joinGame(signer);
       
-      console.log("Proccess to mint citizen was completed!");
+      // console.log("Proccess to create game was completed!");
+      console.log("Proccess to join game was completed!");
     } catch (error) {
-      console.error("Error during minting citizen:", error);
+      // console.error("Error during create game:", error);
+      console.error("Error during join game:", error);
     }
 }
 
