@@ -2,8 +2,7 @@
 multiversx_sc::imports!();
 multiversx_sc::derive_imports!();
 
-// const BLOCKS_IN_HOUR: u64 = 600;
-const BLOCKS_IN_HOUR: u64 = 1;
+const BLOCKS_IN_HOUR: u64 = 600;
 
 const WOOD_REQUIRED: u64 = 10;
 const FOOD_REQUIRED: u64 = 15;

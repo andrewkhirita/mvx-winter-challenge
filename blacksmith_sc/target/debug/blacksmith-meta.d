@@ -1,1 +1,0 @@
-/Users/andrewkhirita/Desktop/mvx-winter-challenge/blacksmith_sc/target/debug/blacksmith-meta: /Users/andrewkhirita/Desktop/mvx-winter-challenge/blacksmith_sc/meta/src/main.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/blacksmith_sc/src/blacksmith.rs

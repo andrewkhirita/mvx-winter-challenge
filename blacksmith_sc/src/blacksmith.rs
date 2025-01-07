@@ -1,8 +1,7 @@
 #![no_std]
 use multiversx_sc::imports::*;
 
-// const BLOCKS_IN_HOUR: u64 = 600;
-const BLOCKS_IN_HOUR: u64 = 1;
+const BLOCKS_IN_HOUR: u64 = 600;
 const ORE_REQUIRED_FOR_SHIELD: u64 = 2;
 
 const GOLD_REQUIRED_FOR_SWORD: u64 = 1;

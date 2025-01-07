@@ -1,1 +1,0 @@
-/Users/andrewkhirita/Desktop/mvx-winter-challenge/staking_sc/target/debug/staking-meta: /Users/andrewkhirita/Desktop/mvx-winter-challenge/staking_sc/meta/src/main.rs /Users/andrewkhirita/Desktop/mvx-winter-challenge/staking_sc/src/staking.rs

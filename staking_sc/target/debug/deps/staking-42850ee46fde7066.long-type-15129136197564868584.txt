@@ -1,1 +1,0 @@
-Tx<TxScEnv<<Self as multiversx_sc::contract_base::ContractBase>::Api>, (), ESDTSystemSCAddress, NotPayable, (), FunctionCall<<Self as multiversx_sc::contract_base::ContractBase>::Api>, OriginalResultMarker<()>>

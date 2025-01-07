@@ -1,1 +1,0 @@
-multiversx_sc::types::ManagedRef<'_, <Self as multiversx_sc::contract_base::ContractBase>::Api, <Self as multiversx_sc::contract_base::ContractBase>::Api>

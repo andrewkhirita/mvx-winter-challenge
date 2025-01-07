@@ -1,3 +1,0 @@
-multiversx_sc::types::managed::wrapped::big_uint::BigUint<<Self as contract_base::contract_base_trait::ContractBase>::Api>
-ManagedRef<'_, <Self as contract_base::contract_base_trait::ContractBase>::Api, multiversx_sc::types::managed::wrapped::big_uint::BigUint<<Self as contract_base::contract_base_trait::ContractBase>::Api>>
-ManagedRef<'_, <Self as multiversx_sc::contract_base::ContractBase>::Api, multiversx_sc::types::BigUint<<Self as multiversx_sc::contract_base::ContractBase>::Api>>

@@ -11,7 +11,6 @@ pub trait Snow {
     #[init]
     fn init(&self) {}
 
-
     //Challenge 5
     #[payable("EGLD")]
     #[endpoint(issueTokenSnow)]
