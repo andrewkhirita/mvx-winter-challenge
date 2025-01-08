@@ -15,16 +15,12 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-// const WOOD_SC = "erd1qqqqqqqqqqqqqpgqcs54gq36d6lgc4q57jpsu8veys7xe27k6dkqaswnpz";
-// const WOOD_SC_TEST = "erd1qqqqqqqqqqqqqpgqrqds9gxytvqxmtu09qvjkw4r97z497de6dkqv2xnkx";
-// const STONE_SC = "erd1qqqqqqqqqqqqqpgqvl3xlxz4rarxn6m95trqffkl7gwpxd7k6dkqzcpqvj";
-// const STONE_SC_TEST = "erd1qqqqqqqqqqqqqpgq23y2x76aawjjwtfdmuuqsecshvwq459m6dkqy5jyqh";
-// const FOOD_SC = "erd1qqqqqqqqqqqqqpgqqtsm6hkf89nq49z0ztys8ulr7z5gp5426dkqnaac6q";
-// const FOOD_SC_TEST = "erd1qqqqqqqqqqqqqpgqrad0al0gqpnqg68e9t4zfg853urg97au6dkqjz6mh3";
-// const GOLD_SC = "erd1qqqqqqqqqqqqqpgqggjxlqw9v9uxqn8yknm8k85ss6l5wexc6dkqjdk8r8";
-// const GOLD_SC_TEST = "erd1qqqqqqqqqqqqqpgq5uujszsw0n2tvqccedjxvtl6lsau7atu6dkqhnu7jn";
 
-const RESOURCE_WOOD_SC = "erd1qqqqqqqqqqqqqpgq38rjkuy3twesvmm39xhd95yte7n250jp6dkqzrmwma";
+//generate a bunch of tokens for each resources just for testing functionalities (no limits round)
+const WOOD_SC_TEST = "erd1qqqqqqqqqqqqqpgqrqds9gxytvqxmtu09qvjkw4r97z497de6dkqv2xnkx";
+// const STONE_SC_TEST = "erd1qqqqqqqqqqqqqpgq23y2x76aawjjwtfdmuuqsecshvwq459m6dkqy5jyqh";
+// const FOOD_SC_TEST = "erd1qqqqqqqqqqqqqpgqrad0al0gqpnqg68e9t4zfg853urg97au6dkqjz6mh3";
+// const GOLD_SC_TEST = "erd1qqqqqqqqqqqqqpgq5uujszsw0n2tvqccedjxvtl6lsau7atu6dkqhnu7jn";
 
 const FUNCTION_GENERATE = "generateResources";
 const FUNCTION_STAKE = "stakeWinter";
@@ -57,7 +53,7 @@ async function issueToken(
   
   const transaction = factory.createTransactionForExecute({
       sender: address,
-      contract: Address.fromBech32(RESOURCE_WOOD_SC),
+      contract: Address.fromBech32(WOOD_SC_TEST),
       function: "issueToken",
       gasLimit: BigInt(100000000),
       arguments: args,
@@ -94,7 +90,7 @@ async function stakeTokenWinter(
 
   const transaction = factory.createTransactionForExecute({
     sender: address,
-    contract: Address.fromBech32(RESOURCE_WOOD_SC),
+    contract: Address.fromBech32(WOOD_SC_TEST),
     function: FUNCTION_STAKE,
     gasLimit: BigInt(5000000),
     tokenTransfers: [payment]
@@ -128,7 +124,7 @@ async function generateResources(
   
     const transaction = factory.createTransactionForExecute({
         sender: address,
-        contract: Address.fromBech32(RESOURCE_WOOD_SC),
+        contract: Address.fromBech32(WOOD_SC_TEST),
         function: FUNCTION_GENERATE,
         gasLimit: BigInt(5000000),
         arguments: args,

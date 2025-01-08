@@ -144,9 +144,9 @@ async function main() {
       const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${0}_${1}.json`);
       
       const signer = await loadWallet(walletPath);
-      // await issueToken(signer, "CITIZEN", "CITIZEN");
+      await issueToken(signer, "CITIZEN", "CITIZEN");
       // await mintCitizen(signer);
-      await claimCitizen(signer);
+      // await claimCitizen(signer);
       
       console.log("Proccess to mint citizen was completed!");
     } catch (error) {

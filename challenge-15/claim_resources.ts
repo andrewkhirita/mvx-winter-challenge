@@ -14,16 +14,11 @@ import {
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
-// const WOOD_SC = "erd1qqqqqqqqqqqqqpgqcs54gq36d6lgc4q57jpsu8veys7xe27k6dkqaswnpz";
-// const WOOD_SC_TEST = "erd1qqqqqqqqqqqqqpgqrqds9gxytvqxmtu09qvjkw4r97z497de6dkqv2xnkx";
-// const FOOD_SC_TEST = "erd1qqqqqqqqqqqqqpgqrad0al0gqpnqg68e9t4zfg853urg97au6dkqjz6mh3";
-// const STONE_SC_TEST = "erd1qqqqqqqqqqqqqpgq23y2x76aawjjwtfdmuuqsecshvwq459m6dkqy5jyqh";
-// const STONE_SC = "erd1qqqqqqqqqqqqqpgqvl3xlxz4rarxn6m95trqffkl7gwpxd7k6dkqzcpqvj";
-// const FOOD_SC = "erd1qqqqqqqqqqqqqpgqqtsm6hkf89nq49z0ztys8ulr7z5gp5426dkqnaac6q";
-// const GOLD_SC = "erd1qqqqqqqqqqqqqpgqggjxlqw9v9uxqn8yknm8k85ss6l5wexc6dkqjdk8r8";
-// const GOLD_SC_TEST = "erd1qqqqqqqqqqqqqpgq5uujszsw0n2tvqccedjxvtl6lsau7atu6dkqhnu7jn";
 
-const RESOURCE_WOOD_SC = "erd1qqqqqqqqqqqqqpgq38rjkuy3twesvmm39xhd95yte7n250jp6dkqzrmwma";
+const WOOD_SC_TEST = "erd1qqqqqqqqqqqqqpgqrqds9gxytvqxmtu09qvjkw4r97z497de6dkqv2xnkx";
+// const STONE_SC_TEST = "erd1qqqqqqqqqqqqqpgq23y2x76aawjjwtfdmuuqsecshvwq459m6dkqy5jyqh";
+// const FOOD_SC_TEST = "erd1qqqqqqqqqqqqqpgqrad0al0gqpnqg68e9t4zfg853urg97au6dkqjz6mh3";
+// const GOLD_SC_TEST = "erd1qqqqqqqqqqqqqpgq5uujszsw0n2tvqccedjxvtl6lsau7atu6dkqhnu7jn";
 
 const FUNCTION = "claimResources";
 const CHAIN_ID = "D";
@@ -47,7 +42,7 @@ async function claimResources(
 
     const transaction = factory.createTransactionForExecute({
         sender: address,
-        contract: Address.fromBech32(RESOURCE_WOOD_SC),
+        contract: Address.fromBech32(WOOD_SC_TEST),
         function: FUNCTION,
         gasLimit: BigInt(5000000),
         arguments: args,

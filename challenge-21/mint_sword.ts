@@ -8,8 +8,13 @@ import {
     TransactionComputer,
     Account,
     SmartContractTransactionsFactory,
+    TokenIdentifierValue,
+    AddressValue,
+    StringValue,
     Token,
     TokenTransfer,
+    U64Value,
+    BigIntValue,
 } from '@multiversx/sdk-core';
 
 const URL = "https://devnet-api.multiversx.com";
@@ -17,11 +22,50 @@ const SMART_CONTRACT = "erd1qqqqqqqqqqqqqpgq9hvgwd5dpa8md9hw73uf557z8xjuwua46dkq
 
 const FUNCTION_TO_CLAIM = "claimSword";
 const FUNCTION_TO_MINT = "mintSword";
+const FUNCTION_TO_ISSUE = "issue";
+
 const CHAIN_ID = "D";
+
+const EGLD_FEE = 50000000000000000;
 
 const apiNetworkProvider = new ApiNetworkProvider(URL);
 const config = new TransactionsFactoryConfig({ chainID: CHAIN_ID});
 const factory = new SmartContractTransactionsFactory({config:config});
+
+async function issueToken(
+  signer: UserSigner,
+  tokenName: string,
+  tokenTicker: string,
+): Promise<void> {
+  const userAddress = signer.getAddress().toString();
+  const address = Address.fromBech32(userAddress);
+
+  const account = new Account(address);
+  const accountOnNetwork = await apiNetworkProvider.getAccount(address);
+  account.update(accountOnNetwork);
+
+  let args = [new StringValue(tokenName),new StringValue(tokenTicker)];
+  
+  const transaction = factory.createTransactionForExecute({
+      sender: address,
+      contract: Address.fromBech32(SMART_CONTRACT),
+      function: FUNCTION_TO_ISSUE,
+      gasLimit: BigInt(80000000),
+      arguments: args,
+      nativeTransferAmount: BigInt(EGLD_FEE)
+  });
+  
+  const nonce = account.getNonceThenIncrement();
+  transaction.nonce = BigInt(nonce.valueOf());
+
+  const transactionComputer = new TransactionComputer();
+  const serializedTransaction = transactionComputer.computeBytesForSigning(transaction);
+  const signature = await signer.sign(serializedTransaction);
+  transaction.signature = signature;
+
+  const txHash = await apiNetworkProvider.sendTransaction(transaction);
+  console.log("Transaction hash:", txHash);
+}
 
 async function mintSword(
     signer: UserSigner,
@@ -47,7 +91,8 @@ async function mintSword(
             token: new Token({ identifier: "GOLD-ec9de5"}),
             amount: BigInt(1),
         })
-      ]    });
+      ] 
+    });
     
     const nonce = account.getNonceThenIncrement();
     transaction.nonce = BigInt(nonce.valueOf());
@@ -100,12 +145,13 @@ async function main() {
       const walletPath = path.join(__dirname, `../challenge-1/wallets/wallet_shard${0}_${1}.json`);
       
       const signer = await loadWallet(walletPath);
-      // await mintSword(signer);
-      await claimSword(signer);
+    //   await issueToken(signer, "TOOL", "TOOL");
+      await mintSword(signer);
+      // await claimSword(signer);
       
-      console.log("Proccess to mint sword was completed!");
+      console.log("Proccess to mint shield was completed!");
     } catch (error) {
-      console.error("Error during minting sword:", error);
+      console.error("Error during minting shield:", error);
     }
 }
 
