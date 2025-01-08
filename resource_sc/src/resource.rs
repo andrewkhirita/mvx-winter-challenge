@@ -80,19 +80,19 @@ pub trait Resource {
             "Resource type already exists"
         );
 
-        let food_buffer = ManagedBuffer::from(b"FOOD");
         let wood_buffer = ManagedBuffer::from(b"WOOD");
+        let food_buffer = ManagedBuffer::from(b"FOOD");
         let stone_buffer = ManagedBuffer::from(b"STONE");
         let gold_buffer = ManagedBuffer::from(b"GOLD");
 
-        let rounds_required = if resource_type.eq(&food_buffer) {
-            1u64
-        } else if resource_type.eq(&wood_buffer) {
-            1u64
+        let rounds_required = if resource_type.eq(&wood_buffer) {
+            600u64
+        } else if resource_type.eq(&food_buffer) {
+            1200u64
         } else if resource_type.eq(&stone_buffer) {
-            1u64
+            1800u64
         } else if resource_type.eq(&gold_buffer) {
-            2u64
+            2400u64
         } else {
             sc_panic!("Invalid resource type")
         };

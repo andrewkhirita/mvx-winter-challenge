@@ -15,16 +15,16 @@
 11. [x] Challenge 11
 12. [x] Challenge 12
 13. [x] Challenge 13
-14. [ ] Challenge 14
-15. [ ] Challenge 15
-16. [ ] Challenge 16
-17. [ ] Challenge 17
-18. [ ] Challenge 18
-19. [ ] Challenge 19
-20. [ ] Challenge 20
-21. [ ] Challenge 21
-22. [ ] Challenge 22
-23. [ ] Challenge 23
+14. [x] Challenge 14
+15. [x] Challenge 15
+16. [x] Challenge 16
+17. [x] Challenge 17
+18. [x] Challenge 18
+19. [x] Challenge 19
+20. [x] Challenge 20
+21. [x] Challenge 21
+22. [x] Challenge 22
+23. [x] Challenge 23
 
 ## 🔗 Official Links
 - [MultiversX Official Website](https://multiversx.com/)

@@ -110,14 +110,14 @@ pub trait Ore {
         self.send().esdt_local_mint(
             &token_id,
             nonce,
-            &BigUint::from(1000u64)
+            &BigUint::from(1u64)
         );
     
         self.send().direct_esdt(
             to,
             &token_id,
             nonce,
-            &BigUint::from(1000u64)
+            &BigUint::from(1u64)
         );
     }
 

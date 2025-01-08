@@ -1,105 +1,56 @@
-# Deploying a Smart Contract
+# Snow Token Management Smart Contract
 
-This guide explains how to deploy a smart contract using the MultiversX framework.
+A MultiversX smart contract for token management operations.
 
-## Prerequisites
+## Contract Methods
 
-Before deploying a smart contract, ensure you have the following setup:
+### issueTokenSnow(token_name, token_ticker, initial_supply)
+Issues a new fungible token with the following properties:
+- Requires EGLD payment for issuance
+- Creates token with 8 decimals
+- Includes all special properties: freeze, wipe, pause, change owner, upgrade, special roles, burn, mint
+- Sets initial token supply
+- Stores token information in user's balance and issued tokens list
 
-### Rust Programming Language
+### burnTokens(token_identifier, amount)
+Allows burning of tokens:
+- Verifies if there's sufficient balance for burning
+- Updates the token balance after burning
+- Performs the local burn operation
 
-Install the Rust programming language on your system:
+### View Methods
 
-```bash
-# Install Rust using rustup
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+#### getAllUsersTokens(address)
+Returns all tokens issued by a specific address:
+- Lists all token identifiers associated with the address
 
-# Choose the default toolchain
-rustup update
-rustup default stable
+#### getAllUserTokenBalances(address)
+Returns all token balances for an address:
+- Only callable by the address owner
+- Returns pairs of (token_identifier, balance)
 
-# Add WebAssembly target
-rustup target add wasm32-unknown-unknown
+#### getSingleTokenBalance(token_id)
+Returns the balance for a specific token:
+- Shows current balance for the requested token
 
-# Verify installation
-rustc --version
-rustup show
-```
+### Claim Methods
 
-### MultiversX Framework
+#### claimUserTokens(token_identifier)
+Allows users to claim tokens:
+- Verifies if user has claimable amount
+- Sends the claimable tokens to the caller
+- Clears the claimable amount after transfer
 
-- MultiversX Rust framework version **0.50.0** or higher.
-- Install the `multiversx-sc-meta` tool for generating interactor templates:
+#### claimTokens()
+Claims all available tokens for the caller:
+- Checks if user has any issued tokens
+- Transfers all available token balances to the caller
+- Clears the balances after transfer
 
-```bash
-cargo install multiversx-sc-meta
-```
-
-### MultiversX Python SDK
-
-Install the MultiversX SDK CLI, which is required to run `mxpy` commands:
-
-```bash
-pipx install multiversx-sdk-cli --force
-```
-
-### Wallet PEM Files
-
-Generate `.PEM` files from the `.JSON` files of the wallets created in **Challenge #1**. These PEM files are required for signing transactions during deployment.
-
-## Setup
-
-1. Create a directory for your smart contract project, or navigate to your existing project.
-2. Ensure your project contains the necessary Rust smart contract code and configuration files.
-
-## Usage
-
-### Step 1: Build the Smart Contract
-
-Build the smart contract to generate the WebAssembly (`.wasm`) bytecode:
-
-```bash
-mxpy contract build --path "<path_to_your_project>"
-```
-
-Example:
-```bash
-mxpy contract build --path "~/projects/mvx-smart-contracts/my_smart_contract"
-```
-
-### Step 2: Deploy the Smart Contract
-
-Deploy the smart contract to the MultiversX blockchain:
-
-```bash
-mxpy --verbose contract deploy \
-  --bytecode=<path_to_wasm_file> \
-  --recall-nonce \
-  --gas-limit=60000000 \
-  --send \
-  --pem=<path_to_pem_file> \
-  --proxy=https://devnet-api.multiversx.com \
-  --chain="D" \
-  --metadata-payable-by-sc \
-  --metadata-payable
-```
-
-Example:
-```bash
-mxpy --verbose contract deploy \
-  --bytecode=~/projects/mvx-smart-contracts/my_smart_contract/output/contract.wasm \
-  --recall-nonce \
-  --gas-limit=60000000 \
-  --send \
-  --pem=~/wallets/my_wallet.pem \
-  --proxy=https://devnet-api.multiversx.com \
-  --chain="D" \
-  --metadata-payable-by-sc \
-  --metadata-payable
-```
-
-## Notes
-
-- Replace `<path_to_your_project>`, `<path_to_wasm_file>`, and `<path_to_pem_file>` with the appropriate paths on your system.
-- Use the `--proxy` flag to specify the network you are deploying to. For example, use `https://devnet-api.multiversx.com` for the Devnet.
-- Ensure you have sufficient funds in the wallet associated with the PEM file to cover gas fees.
+### Storage
+The contract maintains:
+- Token to claim identifier
+- Claimable amounts per user
+- Issued tokens per user
+- Token balances
+- User tokens list
